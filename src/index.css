@@ -1,0 +1,167 @@
+@import "tailwindcss";
+
+@theme {
+  --color-arena-bg: #050508;
+  --color-arena-panel: #0b0c12;
+  --color-arena-card: #0f1019;
+  --color-arena-cardBorder: #181926;
+  --color-arena-orange: #ff1a40;
+  --color-arena-orangeGlow: #ff4d6d;
+  --color-arena-amber: #ff758f;
+  --color-arena-cyan: #ff2a5f;
+  --color-arena-cyanGlow: #ff0055;
+  --color-arena-green: #00ff66;
+  --color-arena-red: #ff1a40;
+  --color-arena-purple: #ff1a40;
+
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-display: 'Orbitron', 'Chakra Petch', 'Rajdhani', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+@layer base {
+  body {
+    background-color: #07080c;
+    color: #e2e8f0;
+    font-family: 'Inter', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Orbitron', 'Chakra Petch', sans-serif;
+  }
+}
+
+/* Custom 3D Logo Right to Left Rotating Animation */
+@keyframes logoRightToLeft {
+  0% {
+    transform: translateX(55vw) rotateY(-30deg) scale(0.9);
+  }
+  50% {
+    transform: translateX(0vw) rotateY(180deg) scale(1.15);
+  }
+  100% {
+    transform: translateX(-55vw) rotateY(360deg) scale(0.9);
+  }
+}
+
+.animate-logo-right-to-left {
+  animation: logoRightToLeft 4s ease-in-out infinite alternate;
+}
+
+/* Custom HUD Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #07080c;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1e2438;
+  border: 1px solid #ff6b00;
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #ff6b00;
+  box-shadow: 0 0 10px #ff6b00;
+}
+
+/* Background Cyber Grid */
+.bg-cyber-grid {
+  background-image: 
+    linear-gradient(to right, rgba(255, 107, 0, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 107, 0, 0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.bg-cyan-grid {
+  background-image: 
+    linear-gradient(to right, rgba(0, 240, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 240, 255, 0.05) 1px, transparent 1px);
+  background-size: 30px 30px;
+}
+
+/* Scanline Effect overlay */
+.scanline-overlay {
+  position: relative;
+  overflow: hidden;
+}
+
+.scanline-overlay::after {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%, 
+    rgba(0, 0, 0, 0.25) 50%
+  ), linear-gradient(
+    90deg,
+    rgba(255, 0, 0, 0.03),
+    rgba(0, 255, 0, 0.01),
+    rgba(0, 0, 255, 0.03)
+  );
+  z-index: 20;
+  background-size: 100% 3px, 6px 100%;
+  pointer-events: none;
+}
+
+/* HUD Glassmorphism */
+.glass-panel {
+  background: rgba(14, 17, 26, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 107, 0, 0.25);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+.glass-panel-cyan {
+  background: rgba(10, 20, 30, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  box-shadow: 0 8px 32px 0 rgba(0, 240, 255, 0.1);
+}
+
+/* Glowing text classes */
+.text-glow-orange {
+  text-shadow: 0 0 10px rgba(255, 107, 0, 0.7), 0 0 20px rgba(255, 107, 0, 0.4);
+}
+
+.text-glow-cyan {
+  text-shadow: 0 0 10px rgba(0, 240, 255, 0.7), 0 0 20px rgba(0, 240, 255, 0.4);
+}
+
+.text-glow-green {
+  text-shadow: 0 0 10px rgba(0, 255, 102, 0.7), 0 0 20px rgba(0, 255, 102, 0.4);
+}
+
+/* HUD Corner Brackets */
+.hud-box {
+  position: relative;
+}
+
+.hud-box::before, .hud-box::after {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  pointer-events: none;
+}
+
+.hud-box::before {
+  top: -1px;
+  left: -1px;
+  border-top: 2px solid #ff6b00;
+  border-left: 2px solid #ff6b00;
+}
+
+.hud-box::after {
+  bottom: -1px;
+  right: -1px;
+  border-bottom: 2px solid #ff6b00;
+  border-right: 2px solid #ff6b00;
+}
