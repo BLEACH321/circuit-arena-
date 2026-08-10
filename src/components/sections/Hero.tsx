@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Lock, Play, Instagram, Linkedin, Github } from 'lucide-react';
 import { sound } from '../../utils/sound';
 import heroRobotBg from '../../assets/hero_robot_bg.png';
+import { useArena } from '../../context/ArenaContext';
 import { CircuitBreakoutGame } from './CircuitBreakoutGame';
 
 export const Hero: React.FC = () => {
@@ -22,11 +23,20 @@ export const Hero: React.FC = () => {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
+  const { arenaOpen } = useArena();
+
   const handleEnterArenaClick = (e: React.MouseEvent) => {
     e.preventDefault();
     sound.playClick();
-    setShowTooltip(true);
-    setTimeout(() => setShowTooltip(false), 3000);
+    if (arenaOpen) {
+      const target = document.getElementById('rounds');
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      setShowTooltip(true);
+      setTimeout(() => setShowTooltip(false), 3000);
+    }
   };
 
   const handleExplore = () => {

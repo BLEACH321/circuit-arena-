@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
-import { Layers, Zap, Gavel, Cpu, Wrench, Trophy } from 'lucide-react';
+import { Layers, Zap, Gavel, Cpu, Wrench, Trophy, Lock } from 'lucide-react';
 import { Stage0Enter } from './InteractiveRounds/Stage0Enter';
 import { Stage1BidWars } from './InteractiveRounds/Stage1BidWars';
 import { Stage2Design } from './InteractiveRounds/Stage2Design';
 import { Stage3Build } from './InteractiveRounds/Stage3Build';
 import { Stage4Showdown } from './InteractiveRounds/Stage4Showdown';
 import { sound } from '../../utils/sound';
+import { useArena } from '../../context/ArenaContext';
 
 export const EventFlow: React.FC = () => {
+  const { arenaOpen, maxUnlockedStage } = useArena();
   const [activeStage, setActiveStage] = useState<number>(0);
 
   const stages = [
@@ -46,6 +48,7 @@ export const EventFlow: React.FC = () => {
           {stages.map((stg) => {
             const Icon = stg.icon;
             const isActive = activeStage === stg.id;
+            const isLocked = !arenaOpen || (stg.id > maxUnlockedStage);
             return (
               <button
                 key={stg.id}
@@ -63,7 +66,11 @@ export const EventFlow: React.FC = () => {
                   >
                     {stg.tag}
                   </span>
-                  <Icon className="w-4 h-4" style={{ color: stg.color }} />
+                  {isLocked ? (
+                    <Lock className="w-3.5 h-3.5 text-red-500" />
+                  ) : (
+                    <Icon className="w-4 h-4" style={{ color: stg.color }} />
+                  )}
                 </div>
 
                 <h4 className="font-display font-bold text-sm text-white">{stg.title}</h4>
@@ -79,11 +86,32 @@ export const EventFlow: React.FC = () => {
 
         {/* HUD Interactive Stage Detail Panel */}
         <div className="glass-panel p-6 sm:p-10 rounded-2xl border border-[#ff6b00]/30 hud-box bg-gradient-to-b from-[#0d1019] to-[#07080c] min-h-[500px]">
-          {activeStage === 0 && <Stage0Enter />}
-          {activeStage === 1 && <Stage1BidWars />}
-          {activeStage === 2 && <Stage2Design />}
-          {activeStage === 3 && <Stage3Build />}
-          {activeStage === 4 && <Stage4Showdown />}
+          {(!arenaOpen || (activeStage > maxUnlockedStage)) ? (
+            <div className="flex flex-col items-center justify-center min-h-[350px] space-y-6 text-center font-mono animate-fade-in">
+              <div className="w-16 h-16 bg-[#ff1a40]/10 border-2 border-[#ff1a40] rounded-2xl flex items-center justify-center mx-auto shadow-[0_0_20px_rgba(255,26,64,0.4)] animate-pulse">
+                <Lock className="w-8 h-8 text-[#ff1a40]" />
+              </div>
+              <div className="space-y-2">
+                <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#07080c] border border-red-500/30 text-red-500 text-xs font-bold uppercase rounded">
+                  ACCESS STATUS: RESTRICTED
+                </div>
+                <h4 className="text-2xl font-black text-white uppercase tracking-wider">
+                  ROUND {activeStage} ACCESS LOCKED
+                </h4>
+                <p className="text-slate-400 text-xs font-mono max-w-md mx-auto leading-relaxed">
+                  This stage in the Circuit Arena is currently locked by the event organizers. Prepare your squad, verify your telemetry gate checks, and wait for the live unlock broadcast.
+                </p>
+              </div>
+            </div>
+          ) : (
+            <>
+              {activeStage === 0 && <Stage0Enter />}
+              {activeStage === 1 && <Stage1BidWars />}
+              {activeStage === 2 && <Stage2Design />}
+              {activeStage === 3 && <Stage3Build />}
+              {activeStage === 4 && <Stage4Showdown />}
+            </>
+          )}
         </div>
 
       </div>

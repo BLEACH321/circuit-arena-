@@ -5,7 +5,7 @@ import { sound } from '../../utils/sound';
 import logoImg from '../../assets/logo.png';
 
 export const Navbar: React.FC = () => {
-  const { openAdminModal, isAdmin } = useArena();
+  const { isAdmin } = useArena();
   const [scrolled, setScrolled] = useState<boolean>(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
   const [activeSection, setActiveSection] = useState<string>('home');
@@ -145,7 +145,7 @@ export const Navbar: React.FC = () => {
             <button
               onClick={() => {
                 sound.playClick();
-                openAdminModal();
+                window.location.hash = '#admin-page';
               }}
               className={`p-2 bg-[#0e111a] border rounded transition-all text-xs font-mono flex items-center gap-1.5 ${
                 isAdmin
@@ -217,7 +217,7 @@ export const Navbar: React.FC = () => {
               onClick={() => {
                 sound.playClick();
                 setMobileMenuOpen(false);
-                openAdminModal();
+                window.location.hash = '#admin-page';
               }}
               className="w-full py-2.5 bg-[#0e111a] border border-slate-700 text-slate-300 font-mono text-xs rounded text-center flex items-center justify-center gap-2 cursor-pointer"
             >

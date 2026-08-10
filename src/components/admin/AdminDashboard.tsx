@@ -21,7 +21,12 @@ export const AdminDashboard: React.FC = () => {
     addAnnouncement,
     deleteAnnouncement,
     countdownTarget,
-    setCountdownTarget
+    setCountdownTarget,
+    arenaOpen,
+    maxUnlockedStage,
+    setArenaOpen,
+    setMaxUnlockedStage,
+    resetArenaData
   } = useArena();
 
   const [activeTab, setActiveTab] = useState<'teams' | 'scores' | 'announcements' | 'settings'>('teams');
@@ -472,29 +477,123 @@ export const AdminDashboard: React.FC = () => {
 
         {/* Tab 4: Settings */}
         {activeTab === 'settings' && (
-          <div className="bg-[#07080c] p-6 rounded border border-slate-800 space-y-4 max-w-md">
-            <h4 className="font-display font-bold text-white text-sm text-[#ffb700]">CONFIGURE EVENT COUNTDOWN TARGET</h4>
-            
-            <div>
-              <label className="block text-xs text-slate-400 mb-1">EVENT LAUNCH TIMESTAMP (ISO / LOCAL)</label>
-              <input
-                type="datetime-local"
-                value={newCountdown}
-                onChange={(e) => setNewCountdown(e.target.value)}
-                className="w-full p-2.5 bg-[#0e111a] border border-slate-700 rounded text-xs text-white"
-              />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-[#07080c] p-6 rounded border border-slate-800 space-y-5">
+              <h4 className="font-display font-bold text-white text-sm text-[#ffb700] uppercase border-b border-slate-800 pb-2">
+                ARENA ACCESS CONTROLS
+              </h4>
+
+              {/* Arena Open/Close Toggle */}
+              <div className="space-y-2">
+                <span className="block text-xs text-slate-400 uppercase">ARENA ACCESS MODE</span>
+                <div className="flex items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      sound.playSuccess();
+                      setArenaOpen(true);
+                    }}
+                    className={`flex-1 py-3 font-display font-black text-xs uppercase rounded transition-all ${
+                      arenaOpen
+                        ? 'bg-[#00ff66] text-black shadow-[0_0_20px_rgba(0,255,102,0.4)] font-bold'
+                        : 'bg-[#0e111a] border border-slate-800 text-slate-500 hover:text-slate-300'
+                    }`}
+                  >
+                    [ OPEN ARENA ]
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      sound.playClick();
+                      setArenaOpen(false);
+                    }}
+                    className={`flex-1 py-3 font-display font-black text-xs uppercase rounded transition-all ${
+                      !arenaOpen
+                        ? 'bg-red-600 text-white shadow-[0_0_20px_rgba(220,38,38,0.4)] font-bold'
+                        : 'bg-[#0e111a] border border-slate-800 text-slate-500 hover:text-slate-300'
+                    }`}
+                  >
+                    [ LOCK ARENA ]
+                  </button>
+                </div>
+                <p className="text-[10px] text-slate-500 leading-relaxed font-sans">
+                  When open, squads can bypass the countdown, view their dashboard, and begin tasks. When closed, the site shows the countdown page.
+                </p>
+              </div>
+
+              {/* Stage Progress Control */}
+              <div className="space-y-2 pt-2 border-t border-slate-900">
+                <span className="block text-xs text-slate-400 uppercase">ACTIVE ARENA STAGE REVEAL</span>
+                <select
+                  value={maxUnlockedStage}
+                  onChange={(e) => {
+                    sound.playClick();
+                    setMaxUnlockedStage(parseInt(e.target.value, 10));
+                  }}
+                  className="w-full p-2.5 bg-[#0e111a] border border-slate-700 rounded text-xs text-white uppercase font-bold"
+                >
+                  <option value={0}>STAGE 0: ENTER THE ARENA ONLY</option>
+                  <option value={1}>STAGE 1: UP TO BID WARS</option>
+                  <option value={2}>STAGE 2: UP TO DESIGN ARENA</option>
+                  <option value={3}>STAGE 3: UP TO BUILD ARENA</option>
+                  <option value={4}>STAGE 4: ALL STAGES UNLOCKED</option>
+                </select>
+                <p className="text-[10px] text-slate-500 leading-relaxed font-sans">
+                  Limits the maximum stage participants can progress to. Stages beyond this will show a lock screen.
+                </p>
+              </div>
             </div>
 
-            <button
-              onClick={() => {
-                sound.playSuccess();
-                setCountdownTarget(newCountdown);
-                alert('Countdown date updated successfully!');
-              }}
-              className="px-6 py-2 bg-[#ffb700] hover:bg-[#ffaa00] text-black font-display font-bold text-xs uppercase rounded"
-            >
-              [ SAVE COUNTDOWN DATE ]
-            </button>
+            <div className="bg-[#07080c] p-6 rounded border border-slate-800 space-y-5">
+              <h4 className="font-display font-bold text-white text-sm text-[#ffb700] uppercase border-b border-slate-800 pb-2">
+                EVENT TIMES & RESET
+              </h4>
+
+              <div className="space-y-2">
+                <label className="block text-xs text-slate-400 uppercase">EVENT LAUNCH TIMESTAMP</label>
+                <div className="flex gap-2">
+                  <input
+                    type="datetime-local"
+                    value={newCountdown}
+                    onChange={(e) => setNewCountdown(e.target.value)}
+                    className="flex-1 p-2.5 bg-[#0e111a] border border-slate-700 rounded text-xs text-white"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      sound.playSuccess();
+                      setCountdownTarget(newCountdown);
+                      alert('Countdown date updated successfully!');
+                    }}
+                    className="px-4 py-2 bg-[#ffb700] hover:bg-[#ffaa00] text-black font-display font-bold text-xs uppercase rounded cursor-pointer"
+                  >
+                    SAVE
+                  </button>
+                </div>
+              </div>
+
+              {/* Hard Reset */}
+              <div className="space-y-2 pt-4 border-t border-slate-900">
+                <span className="block text-xs text-slate-400 uppercase text-red-500 font-bold">DANGER ZONE</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    sound.playClick();
+                    if (confirm('CRITICAL WARNING: Are you absolutely sure you want to RESET all Arena registrations, scores, and announcements? This action cannot be undone!')) {
+                      resetArenaData();
+                      alert('Arena database wiped successfully!');
+                      window.location.reload();
+                    }
+                  }}
+                  className="w-full py-3 bg-red-950/40 hover:bg-red-950 text-red-400 border border-red-800 hover:border-red-600 font-display font-bold text-xs uppercase rounded transition-colors cursor-pointer"
+                >
+                  [ ERASE ALL REGISTRATIONS & DATA ]
+                </button>
+                <p className="text-[10px] text-slate-500 leading-relaxed font-sans">
+                  Clears local storage data for all teams, leaderboard scores, and dispatches.
+                </p>
+              </div>
+            </div>
           </div>
         )}
 

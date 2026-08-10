@@ -19,6 +19,8 @@ interface ArenaContextType {
   registrationModalOpen: boolean;
   countdownTarget: string; // ISO date string
   registeredTeam: Team | null; // Currently submitted team in session
+  arenaOpen: boolean;
+  maxUnlockedStage: number;
 
   // Actions
   loginAdmin: (pass: string) => boolean;
@@ -35,6 +37,9 @@ interface ArenaContextType {
   deleteAnnouncement: (id: string) => void;
   setCountdownTarget: (dateStr: string) => void;
   setRegisteredTeam: (team: Team | null) => void;
+  setArenaOpen: (open: boolean) => void;
+  setMaxUnlockedStage: (stage: number) => void;
+  resetArenaData: () => void;
 }
 
 const ArenaContext = createContext<ArenaContextType | undefined>(undefined);
@@ -48,6 +53,13 @@ export const ArenaProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [registrationModalOpen, setRegistrationModalOpen] = useState<boolean>(false);
   const [countdownTarget, setTargetDate] = useState<string>('2026-09-15T10:00:00');
   const [registeredTeam, setRegisteredTeam] = useState<Team | null>(null);
+  const [arenaOpen, setArenaOpenState] = useState<boolean>(() => {
+    return localStorage.getItem('circuit_arena_open') === 'true';
+  });
+  const [maxUnlockedStage, setMaxUnlockedStageState] = useState<number>(() => {
+    const val = localStorage.getItem('circuit_arena_max_stage');
+    return val !== null ? parseInt(val, 10) : 0; // Default to Stage 0 unlocked when opened
+  });
 
   useEffect(() => {
     setTeams(getStoredTeams());
@@ -165,6 +177,26 @@ export const ArenaProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setTargetDate(dateStr);
   };
 
+  const setArenaOpen = (open: boolean) => {
+    setArenaOpenState(open);
+    localStorage.setItem('circuit_arena_open', open ? 'true' : 'false');
+  };
+
+  const setMaxUnlockedStage = (stage: number) => {
+    setMaxUnlockedStageState(stage);
+    localStorage.setItem('circuit_arena_max_stage', stage.toString());
+  };
+
+  const resetArenaData = () => {
+    setTeams([]);
+    setScores([]);
+    setAnnouncements([]);
+    setRegisteredTeam(null);
+    localStorage.removeItem('circuit_arena_teams');
+    localStorage.removeItem('circuit_arena_scores');
+    localStorage.removeItem('circuit_arena_announcements');
+  };
+
   return (
     <ArenaContext.Provider
       value={{
@@ -176,6 +208,8 @@ export const ArenaProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         registrationModalOpen,
         countdownTarget,
         registeredTeam,
+        arenaOpen,
+        maxUnlockedStage,
         loginAdmin,
         logoutAdmin,
         openAdminModal,
@@ -189,7 +223,10 @@ export const ArenaProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         addAnnouncement,
         deleteAnnouncement,
         setCountdownTarget,
-        setRegisteredTeam
+        setRegisteredTeam,
+        setArenaOpen,
+        setMaxUnlockedStage,
+        resetArenaData
       }}
     >
       {children}
