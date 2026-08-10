@@ -14,15 +14,21 @@ interface Step3Props {
   isSubmitting: boolean;
   onPrev: () => void;
   onConfirm: () => void;
+  agreed?: boolean;
+  setAgreed?: (val: boolean) => void;
 }
 
 export const Step3Confirmation: React.FC<Step3Props> = ({
   formData,
   isSubmitting,
   onPrev,
-  onConfirm
+  onConfirm,
+  agreed: propAgreed,
+  setAgreed: propSetAgreed
 }) => {
-  const [agreed, setAgreed] = useState<boolean>(false);
+  const [localAgreed, setLocalAgreed] = useState<boolean>(false);
+  const agreed = propAgreed !== undefined ? propAgreed : localAgreed;
+  const setAgreed = propSetAgreed !== undefined ? propSetAgreed : setLocalAgreed;
   const [localError, setLocalError] = useState<string>('');
 
   const handleSubmit = () => {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { X } from 'lucide-react';
 import { useArena } from '../../context/ArenaContext';
 import type { Participant, Team } from '../../types/arena';
@@ -7,6 +7,7 @@ import { Step2Participants } from './Step2Participants';
 import { Step3Confirmation } from './Step3Confirmation';
 import { SuccessScreen } from './SuccessScreen';
 import { sound } from '../../utils/sound';
+import { CircuitVisualizer } from './CircuitVisualizer';
 
 export const RegistrationModal: React.FC = () => {
   const { registrationModalOpen, closeRegistrationModal, registerTeam, teams } = useArena();
@@ -32,10 +33,21 @@ export const RegistrationModal: React.FC = () => {
   ]);
 
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [agreed, setAgreed] = useState<boolean>(false);
+
+  const lastClickTimeRef = useRef<number>(0);
+  const playTypeSound = () => {
+    const now = Date.now();
+    if (now - lastClickTimeRef.current > 80) {
+      sound.playClick();
+      lastClickTimeRef.current = now;
+    }
+  };
 
   if (!registrationModalOpen) return null;
 
   const handleChangeForm = (field: string, value: any) => {
+    playTypeSound();
     setFormData(prev => ({ ...prev, [field]: value }));
     if (errors[field]) {
       setErrors(prev => {
@@ -57,6 +69,7 @@ export const RegistrationModal: React.FC = () => {
   };
 
   const handleChangeParticipant = (index: number, field: keyof Participant, value: string) => {
+    playTypeSound();
     setParticipants(prev => prev.map((p, idx) => idx === index ? { ...p, [field]: value } : p));
 
     const errKey = `p_${index}_${field}`;
@@ -153,7 +166,7 @@ export const RegistrationModal: React.FC = () => {
 
   return (
     <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 scanline-overlay">
-      <div className="w-full max-w-2xl bg-[#0e111a] border-2 border-[#ff6b00] rounded-2xl p-6 sm:p-8 max-h-[90vh] overflow-y-auto hud-box shadow-[0_0_50px_rgba(255,107,0,0.3)]">
+      <div className="w-full max-w-5xl bg-[#0e111a] border-2 border-[#ff6b00] rounded-2xl p-6 sm:p-8 max-h-[90vh] overflow-y-auto hud-box shadow-[0_0_50px_rgba(255,107,0,0.3)]">
         
         {/* Header */}
         <div className="flex justify-between items-center border-b border-slate-800 pb-4 mb-6">
@@ -175,42 +188,61 @@ export const RegistrationModal: React.FC = () => {
           </button>
         </div>
 
-        {/* Dynamic Wizard Steps */}
-        {step === 1 && (
-          <Step1TeamInfo
-            formData={formData}
-            errors={errors}
-            onChange={handleChangeForm}
-            onNext={handleNextFrom1}
-          />
-        )}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          
+          {/* Telemetry Circuit Panel */}
+          <div className="lg:col-span-5 h-full">
+            <CircuitVisualizer
+              teamName={formData.teamName}
+              teamSize={formData.teamSize}
+              participants={participants}
+              step={step}
+              agreed={agreed}
+            />
+          </div>
 
-        {step === 2 && (
-          <Step2Participants
-            teamSize={formData.teamSize}
-            participants={participants}
-            errors={errors}
-            onChangeParticipant={handleChangeParticipant}
-            onPrev={() => setStep(1)}
-            onNext={handleNextFrom2}
-          />
-        )}
+          {/* Wizard Steps Form */}
+          <div className="lg:col-span-7 space-y-6">
+            {/* Dynamic Wizard Steps */}
+            {step === 1 && (
+              <Step1TeamInfo
+                formData={formData}
+                errors={errors}
+                onChange={handleChangeForm}
+                onNext={handleNextFrom1}
+              />
+            )}
 
-        {step === 3 && (
-          <Step3Confirmation
-            formData={formData}
-            isSubmitting={isSubmitting}
-            onPrev={() => setStep(2)}
-            onConfirm={handleConfirmSubmit}
-          />
-        )}
+            {step === 2 && (
+              <Step2Participants
+                teamSize={formData.teamSize}
+                participants={participants}
+                errors={errors}
+                onChangeParticipant={handleChangeParticipant}
+                onPrev={() => setStep(1)}
+                onNext={handleNextFrom2}
+              />
+            )}
 
-        {step === 4 && createdTeam && (
-          <SuccessScreen
-            team={createdTeam}
-            onClose={closeRegistrationModal}
-          />
-        )}
+            {step === 3 && (
+              <Step3Confirmation
+                formData={formData}
+                isSubmitting={isSubmitting}
+                onPrev={() => setStep(2)}
+                onConfirm={handleConfirmSubmit}
+                agreed={agreed}
+                setAgreed={setAgreed}
+              />
+            )}
+
+            {step === 4 && createdTeam && (
+              <SuccessScreen
+                team={createdTeam}
+                onClose={closeRegistrationModal}
+              />
+            )}
+          </div>
+        </div>
 
       </div>
     </div>

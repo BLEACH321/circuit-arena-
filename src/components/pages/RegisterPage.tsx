@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { ShieldCheck, Cpu, ArrowLeft, Users, CheckCircle2, AlertCircle, RefreshCw, Download, Sparkles } from 'lucide-react';
 import { useArena } from '../../context/ArenaContext';
 import type { Participant, Team } from '../../types/arena';
 import { sound } from '../../utils/sound';
 import confetti from 'canvas-confetti';
+import { CircuitVisualizer } from '../registration/CircuitVisualizer';
 
 export const RegisterPage: React.FC<{ onBackToHome: () => void }> = ({ onBackToHome }) => {
   const { registerTeam, teams } = useArena();
@@ -31,9 +32,19 @@ export const RegisterPage: React.FC<{ onBackToHome: () => void }> = ({ onBackToH
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [agreed, setAgreed] = useState<boolean>(false);
 
+  const lastClickTimeRef = useRef<number>(0);
+  const playTypeSound = () => {
+    const now = Date.now();
+    if (now - lastClickTimeRef.current > 80) {
+      sound.playClick();
+      lastClickTimeRef.current = now;
+    }
+  };
+
   const validateEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   const handleChangeForm = (field: string, value: any) => {
+    playTypeSound();
     setFormData(prev => ({ ...prev, [field]: value }));
     if (errors[field]) {
       setErrors(prev => {
@@ -55,6 +66,7 @@ export const RegisterPage: React.FC<{ onBackToHome: () => void }> = ({ onBackToH
   };
 
   const handleChangeParticipant = (index: number, field: keyof Participant, value: string) => {
+    playTypeSound();
     setParticipants(prev => prev.map((p, idx) => idx === index ? { ...p, [field]: value } : p));
 
     const errKey = `p_${index}_${field}`;
@@ -188,7 +200,7 @@ INSTRUCTIONS: Present this official Team Ticket at Stage 0 check-in.
       {/* Background Glow Nodes */}
       <div className="absolute top-10 left-1/2 -translate-x-1/2 w-[700px] h-[700px] bg-[#ff6b00]/10 rounded-full blur-[150px] pointer-events-none" />
 
-      <div className="max-w-4xl mx-auto space-y-8 relative z-10">
+      <div className="max-w-7xl mx-auto space-y-8 relative z-10">
         
         {/* Back Navigation Bar */}
         <div className="flex items-center justify-between border-b border-slate-800 pb-4">
@@ -245,7 +257,21 @@ INSTRUCTIONS: Present this official Team Ticket at Stage 0 check-in.
           </div>
         </div>
 
-        {/* STEP 1: TEAM & LEADER INFO */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* Telemetry Circuit Panel */}
+          <div className="lg:col-span-5 h-full">
+            <CircuitVisualizer
+              teamName={formData.teamName}
+              teamSize={formData.teamSize}
+              participants={participants}
+              step={step}
+              agreed={agreed}
+            />
+          </div>
+
+          {/* Wizard Steps Form */}
+          <div className="lg:col-span-7 space-y-6">
+            {/* STEP 1: TEAM & LEADER INFO */}
         {step === 1 && (
           <div className="glass-panel p-8 rounded-2xl border border-slate-800 hud-box bg-[#0e111a] space-y-6">
             <h3 className="text-lg font-bold font-display text-white uppercase flex items-center gap-2 border-b border-slate-800 pb-3">
@@ -555,6 +581,8 @@ INSTRUCTIONS: Present this official Team Ticket at Stage 0 check-in.
             </div>
           </div>
         )}
+          </div>
+        </div>
 
       </div>
     </div>
