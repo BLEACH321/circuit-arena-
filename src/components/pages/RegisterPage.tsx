@@ -5,6 +5,7 @@ import type { Participant, Team } from '../../types/arena';
 import { sound } from '../../utils/sound';
 import confetti from 'canvas-confetti';
 import { CircuitVisualizer } from '../registration/CircuitVisualizer';
+import paymentQr from '../../assets/payment_qr.jpg';
 
 export const RegisterPage: React.FC<{ onBackToHome: () => void }> = ({ onBackToHome }) => {
   const { registerTeam, teams } = useArena();
@@ -506,7 +507,7 @@ INSTRUCTIONS: Present this official Team Ticket at Stage 0 check-in.
                 {/* QR Code Container */}
                 <div className="flex flex-col items-center gap-2 bg-[#0e111a] p-4 rounded-lg border border-slate-800 w-full md:w-auto">
                   <img
-                    src="/payment_qr.jpg"
+                    src={paymentQr}
                     alt="UPI Payment QR Code"
                     className="w-40 h-40 object-contain border-2 border-[#00f0ff] rounded shadow-[0_0_15px_rgba(0,240,255,0.15)]"
                   />

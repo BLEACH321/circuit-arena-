@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { AlertCircle, RefreshCw } from 'lucide-react';
 import { sound } from '../../utils/sound';
+import paymentQr from '../../assets/payment_qr.jpg';
 
 interface Step3Props {
   formData: {
@@ -113,7 +114,7 @@ export const Step3Confirmation: React.FC<Step3Props> = ({
           {/* QR Code Container */}
           <div className="flex flex-col items-center gap-1 bg-[#0e111a] p-3 rounded border border-slate-800 w-full sm:w-auto">
             <img
-              src="/payment_qr.jpg"
+              src={paymentQr}
               alt="UPI Payment QR Code"
               className="w-36 h-36 object-contain border border-[#00f0ff] rounded shadow-[0_0_10px_rgba(0,240,255,0.1)]"
             />
