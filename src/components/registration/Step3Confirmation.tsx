@@ -10,12 +10,14 @@ interface Step3Props {
     leaderEmail: string;
     leaderPhone: string;
     teamSize: number;
+    transactionId?: string;
   };
   isSubmitting: boolean;
   onPrev: () => void;
   onConfirm: () => void;
   agreed?: boolean;
   setAgreed?: (val: boolean) => void;
+  onChange?: (field: string, value: any) => void;
 }
 
 export const Step3Confirmation: React.FC<Step3Props> = ({
@@ -24,7 +26,8 @@ export const Step3Confirmation: React.FC<Step3Props> = ({
   onPrev,
   onConfirm,
   agreed: propAgreed,
-  setAgreed: propSetAgreed
+  setAgreed: propSetAgreed,
+  onChange
 }) => {
   const [localAgreed, setLocalAgreed] = useState<boolean>(false);
   const agreed = propAgreed !== undefined ? propAgreed : localAgreed;
@@ -32,8 +35,17 @@ export const Step3Confirmation: React.FC<Step3Props> = ({
   const [localError, setLocalError] = useState<string>('');
 
   const handleSubmit = () => {
+    let errMsg = '';
     if (!agreed) {
-      setLocalError('You must accept the official arena rulebook directives to confirm.');
+      errMsg = 'You must accept the official arena rulebook directives to confirm.';
+    } else if (!formData.transactionId?.trim()) {
+      errMsg = 'UPI Transaction ID / Ref No is required.';
+    } else if (!/^\d{12}$/.test(formData.transactionId.trim())) {
+      errMsg = 'Transaction ID must be a 12-digit number.';
+    }
+
+    if (errMsg) {
+      setLocalError(errMsg);
       return;
     }
     setLocalError('');
@@ -90,6 +102,50 @@ export const Step3Confirmation: React.FC<Step3Props> = ({
           </p>
         </div>
 
+      </div>
+
+      {/* Payment Verification Section */}
+      <div className="p-5 bg-[#07080c] border border-slate-800 rounded-lg space-y-4 font-mono text-xs">
+        <h4 className="font-display font-bold text-white text-xs uppercase text-[#ff6b00] border-b border-slate-800 pb-2 text-left">
+          ENTRY FEE PAYMENT REQUIRED // AMOUNT: ₹200
+        </h4>
+        <div className="flex flex-col sm:flex-row gap-4 items-center">
+          {/* QR Code Container */}
+          <div className="flex flex-col items-center gap-1 bg-[#0e111a] p-3 rounded border border-slate-800 w-full sm:w-auto">
+            <img
+              src="/payment_qr.jpg"
+              alt="UPI Payment QR Code"
+              className="w-36 h-36 object-contain border border-[#00f0ff] rounded shadow-[0_0_10px_rgba(0,240,255,0.1)]"
+            />
+            <span className="text-[9px] text-slate-400 font-bold">Shubham Ghelani</span>
+            <span className="text-[8px] text-[#00f0ff] tracking-wider font-bold">ghelanishubham10@okaxis</span>
+          </div>
+
+          {/* Instructions and Input */}
+          <div className="flex-1 space-y-3 text-left w-full">
+            <div className="text-slate-300 space-y-1 leading-relaxed text-[10px] font-sans">
+              <p className="font-bold text-white uppercase font-mono text-[10px]">HOW TO RESOLVE TELEMETRY GATE FEE:</p>
+              <ul className="list-decimal list-inside space-y-0.5 text-slate-400">
+                <li>Scan the QR code with any UPI app.</li>
+                <li>Pay the mandatory entry fee of <strong className="text-[#00ff66]">₹200</strong>.</li>
+                <li>Copy the 12-digit transaction ID from the receipt.</li>
+                <li>Input the ID below to close the security loop.</li>
+              </ul>
+            </div>
+
+            <div className="space-y-1">
+              <label className="block text-slate-300 uppercase font-bold text-[9px]">UPI REFERENCE ID / REF NO (12 DIGITS) *</label>
+              <input
+                type="text"
+                maxLength={12}
+                placeholder="e.g. 320984712039"
+                value={formData.transactionId || ''}
+                onChange={(e) => onChange && onChange('transactionId', e.target.value.replace(/\D/g, ''))}
+                className="w-full p-2 bg-[#07080c] border border-slate-800 focus:border-[#ff6b00] rounded text-white outline-none font-sans text-xs tracking-wider"
+              />
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Agreement Checkbox */}

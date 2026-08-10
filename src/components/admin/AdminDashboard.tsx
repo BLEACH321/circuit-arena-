@@ -517,6 +517,9 @@ export const AdminDashboard: React.FC = () => {
               <p><strong className="text-slate-400">LEADER:</strong> {selectedTeam.leaderName} ({selectedTeam.leaderEmail})</p>
               <p><strong className="text-slate-400">PHONE:</strong> {selectedTeam.leaderPhone}</p>
               <p><strong className="text-slate-400">STATUS:</strong> {selectedTeam.status}</p>
+              {selectedTeam.transactionId && (
+                <p><strong className="text-slate-400">UPI REF ID:</strong> <span className="text-[#00ff66] font-bold">{selectedTeam.transactionId}</span></p>
+              )}
 
               <div className="pt-2 border-t border-slate-800">
                 <strong className="text-[#00f0ff] block mb-2">PARTICIPANTS ROSTER ({selectedTeam.participants.length}):</strong>

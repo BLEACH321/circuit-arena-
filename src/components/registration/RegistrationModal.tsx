@@ -22,7 +22,8 @@ export const RegistrationModal: React.FC = () => {
     leaderName: '',
     leaderEmail: '',
     leaderPhone: '',
-    teamSize: 4
+    teamSize: 4,
+    transactionId: ''
   });
 
   const [participants, setParticipants] = useState<Participant[]>([
@@ -155,7 +156,8 @@ export const RegistrationModal: React.FC = () => {
         leaderEmail: formData.leaderEmail.trim(),
         leaderPhone: formData.leaderPhone.trim(),
         teamSize: formData.teamSize,
-        participants: filteredParticipants
+        participants: filteredParticipants,
+        transactionId: formData.transactionId.trim()
       });
 
       setIsSubmitting(false);
@@ -232,6 +234,7 @@ export const RegistrationModal: React.FC = () => {
                 onConfirm={handleConfirmSubmit}
                 agreed={agreed}
                 setAgreed={setAgreed}
+                onChange={handleChangeForm}
               />
             )}
 

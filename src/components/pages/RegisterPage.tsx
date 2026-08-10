@@ -19,7 +19,8 @@ export const RegisterPage: React.FC<{ onBackToHome: () => void }> = ({ onBackToH
     leaderName: '',
     leaderEmail: '',
     leaderPhone: '',
-    teamSize: 4
+    teamSize: 4,
+    transactionId: ''
   });
 
   const [participants, setParticipants] = useState<Participant[]>([
@@ -128,10 +129,21 @@ export const RegisterPage: React.FC<{ onBackToHome: () => void }> = ({ onBackToH
   };
 
   const handleConfirmRegistration = () => {
+    const errs: Record<string, string> = {};
     if (!agreed) {
-      setErrors({ agreement: 'You must accept the official arena directives to proceed.' });
+      errs.agreement = 'You must accept the official arena directives to proceed.';
+    }
+    if (!formData.transactionId.trim()) {
+      errs.transactionId = 'UPI Transaction ID / Ref No is required.';
+    } else if (!/^\d{12}$/.test(formData.transactionId.trim())) {
+      errs.transactionId = 'Transaction ID must be a 12-digit number.';
+    }
+
+    if (Object.keys(errs).length > 0) {
+      setErrors(errs);
       return;
     }
+    setErrors({});
 
     sound.playClick();
     setIsSubmitting(true);
@@ -149,7 +161,8 @@ export const RegisterPage: React.FC<{ onBackToHome: () => void }> = ({ onBackToH
         leaderEmail: formData.leaderEmail.trim(),
         leaderPhone: formData.leaderPhone.trim(),
         teamSize: formData.teamSize,
-        participants: filteredParticipants
+        participants: filteredParticipants,
+        transactionId: formData.transactionId.trim()
       });
 
       setIsSubmitting(false);
@@ -481,6 +494,55 @@ INSTRUCTIONS: Present this official Team Ticket at Stage 0 check-in.
               <div className="flex justify-between items-center">
                 <span className="text-slate-400">SQUAD ALLOCATION:</span>
                 <span className="text-[#00f0ff] font-bold">{formData.teamSize} MEMBERS | 2000 PTS BUDGET</span>
+              </div>
+            </div>
+
+            {/* Payment Verification Section */}
+            <div className="p-6 bg-[#07080c] border border-slate-800 rounded-xl space-y-4 font-mono text-xs">
+              <h4 className="font-display font-bold text-white text-sm uppercase text-[#ff6b00] border-b border-slate-800 pb-2">
+                ENTRY FEE PAYMENT REQUIRED // AMOUNT: ₹200
+              </h4>
+              <div className="flex flex-col md:flex-row gap-6 items-center">
+                {/* QR Code Container */}
+                <div className="flex flex-col items-center gap-2 bg-[#0e111a] p-4 rounded-lg border border-slate-800 w-full md:w-auto">
+                  <img
+                    src="/payment_qr.jpg"
+                    alt="UPI Payment QR Code"
+                    className="w-40 h-40 object-contain border-2 border-[#00f0ff] rounded shadow-[0_0_15px_rgba(0,240,255,0.15)]"
+                  />
+                  <span className="text-[10px] text-slate-400 font-bold">Shubham Ghelani</span>
+                  <span className="text-[9px] text-[#00f0ff] tracking-wider font-bold">ghelanishubham10@okaxis</span>
+                </div>
+
+                {/* Instructions and Input */}
+                <div className="flex-1 space-y-4 text-left w-full">
+                  <div className="text-slate-300 space-y-1.5 leading-relaxed text-[11px] font-sans">
+                    <p className="font-bold text-white uppercase font-mono text-xs">HOW TO RESOLVE TELEMETRY GATE FEE:</p>
+                    <ul className="list-decimal list-inside space-y-1 text-slate-400">
+                      <li>Scan the QR code with any UPI app (GPay, PhonePe, Paytm, etc.).</li>
+                      <li>Pay the mandatory entry fee of <strong className="text-[#00ff66]">₹200</strong>.</li>
+                      <li>Copy the 12-digit transaction/reference ID from the receipt.</li>
+                      <li>Input the ID below to close the security loop.</li>
+                    </ul>
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="block text-slate-300 uppercase font-bold text-[10px]">UPI REFERENCE ID / REF NO (12 DIGITS) *</label>
+                    <input
+                      type="text"
+                      maxLength={12}
+                      placeholder="e.g. 320984712039"
+                      value={formData.transactionId}
+                      onChange={(e) => handleChangeForm('transactionId', e.target.value.replace(/\D/g, ''))}
+                      className={`w-full p-3 bg-[#07080c] border ${errors.transactionId ? 'border-red-500' : 'border-slate-800 focus:border-[#ff6b00]'} rounded text-white outline-none font-sans text-sm tracking-widest`}
+                    />
+                    {errors.transactionId && (
+                      <p className="text-red-400 text-[10px] mt-1 flex items-center gap-1">
+                        <AlertCircle className="w-3.5 h-3.5" /> {errors.transactionId}
+                      </p>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
 

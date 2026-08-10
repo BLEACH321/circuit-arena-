@@ -19,6 +19,7 @@ export interface Team {
   status: TeamStatus;
   createdAt: string;
   participants: Participant[];
+  transactionId?: string;
 }
 
 export interface TeamScore {
