@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { ShieldAlert, Volume2, VolumeX, Menu, X, Lock } from 'lucide-react';
-import { useArena } from '../../context/ArenaContext';
+import { Volume2, VolumeX, Menu, X } from 'lucide-react';
 import { sound } from '../../utils/sound';
 import logoImg from '../../assets/logo.png';
 
 export const Navbar: React.FC = () => {
-  const { isAdmin } = useArena();
   const [scrolled, setScrolled] = useState<boolean>(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
   const [activeSection, setActiveSection] = useState<string>('home');
@@ -141,22 +139,7 @@ export const Navbar: React.FC = () => {
               {soundOn ? <Volume2 className="w-4 h-4 text-[#ff1a40]" /> : <VolumeX className="w-4 h-4 text-slate-500" />}
             </button>
 
-            {/* Admin Control Center Trigger */}
-            <button
-              onClick={() => {
-                sound.playClick();
-                window.location.hash = '#admin-page';
-              }}
-              className={`p-2 bg-[#0e111a] border rounded transition-all text-xs font-mono flex items-center gap-1.5 cursor-pointer ${
-                isAdmin
-                  ? 'border-[#00ff66] text-[#00ff66] shadow-[0_0_10px_rgba(0,255,102,0.3)]'
-                  : 'border-slate-700 text-slate-400 hover:text-white hover:border-slate-500'
-              }`}
-              title="Admin Control Center"
-            >
-              {isAdmin ? <ShieldAlert className="w-4 h-4 text-[#00ff66]" /> : <Lock className="w-4 h-4" />}
-              <span className="hidden xl:inline">{isAdmin ? 'ADMIN ACTIVE' : 'ADMIN'}</span>
-            </button>
+
 
             {/* PROMINENT JOIN ARENA CTA BUTTON */}
             <button
@@ -213,17 +196,7 @@ export const Navbar: React.FC = () => {
               JOIN ARENA
             </button>
 
-            <button
-              onClick={() => {
-                sound.playClick();
-                setMobileMenuOpen(false);
-                window.location.hash = '#admin-page';
-              }}
-              className="w-full py-2.5 bg-[#0e111a] border border-slate-700 text-slate-300 font-mono text-xs rounded text-center flex items-center justify-center gap-2 cursor-pointer"
-            >
-              <Lock className="w-3.5 h-3.5 text-[#ff758f]" />
-              {isAdmin ? 'ADMIN CONTROL CENTER (ACTIVE)' : 'ORGANIZER LOGIN'}
-            </button>
+
           </div>
         </div>
       )}
