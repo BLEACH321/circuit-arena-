@@ -505,14 +505,28 @@ INSTRUCTIONS: Present this official Team Ticket at Stage 0 check-in.
               </h4>
               <div className="flex flex-col md:flex-row gap-6 items-center">
                 {/* QR Code Container */}
-                <div className="flex flex-col items-center gap-2 bg-[#0e111a] p-4 rounded-lg border border-slate-800 w-full md:w-auto">
-                  <img
-                    src={paymentQr}
-                    alt="UPI Payment QR Code"
-                    className="w-40 h-40 object-contain border-2 border-[#00f0ff] rounded shadow-[0_0_15px_rgba(0,240,255,0.15)]"
-                  />
-                  <span className="text-[10px] text-slate-400 font-bold">Shubham Ghelani</span>
-                  <span className="text-[9px] text-[#00f0ff] tracking-wider font-bold">ghelanishubham10@okaxis</span>
+                <div className="flex flex-col items-center gap-2 bg-[#0e111a] p-4 rounded-xl border border-slate-800 w-full md:w-auto shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
+                  <div className="relative w-44 h-44 bg-white p-1 rounded-lg overflow-hidden border border-[#00f0ff]/50 shadow-[0_0_15px_rgba(0,240,255,0.2)]">
+                    {/* Image filling container */}
+                    <img
+                      src={paymentQr}
+                      alt="UPI Payment QR Code"
+                      className="w-full h-full object-contain bg-white"
+                    />
+                    {/* Laser scanner line effect */}
+                    <div className="absolute left-0 right-0 h-0.5 bg-[#00f0ff] shadow-[0_0_10px_#00f0ff,0_0_20px_#00f0ff] animate-scan-line pointer-events-none" />
+                    {/* Corner tech marks */}
+                    <div className="absolute top-0 left-0 w-1.5 h-1.5 border-t-2 border-l-2 border-[#00f0ff]" />
+                    <div className="absolute top-0 right-0 w-1.5 h-1.5 border-t-2 border-r-2 border-[#00f0ff]" />
+                    <div className="absolute bottom-0 left-0 w-1.5 h-1.5 border-b-2 border-l-2 border-[#00f0ff]" />
+                    <div className="absolute bottom-0 right-0 w-1.5 h-1.5 border-b-2 border-r-2 border-[#00f0ff]" />
+                  </div>
+                  
+                  <div className="text-center font-mono text-xs">
+                    <span className="text-[10px] text-slate-400 font-bold block uppercase tracking-wider">UPI RECIPIENT:</span>
+                    <strong className="text-white text-sm block">Shubham Ghelani</strong>
+                    <code className="text-[#00f0ff] text-[10px] block mt-0.5 tracking-wider font-bold">ghelanishubham10@okaxis</code>
+                  </div>
                 </div>
 
                 {/* Instructions and Input */}

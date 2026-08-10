@@ -165,3 +165,19 @@
   border-bottom: 2px solid #ff6b00;
   border-right: 2px solid #ff6b00;
 }
+
+@keyframes scanLine {
+  0% {
+    top: 0%;
+  }
+  50% {
+    top: 100%;
+  }
+  100% {
+    top: 0%;
+  }
+}
+
+.animate-scan-line {
+  animation: scanLine 3s linear infinite;
+}
