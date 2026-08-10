@@ -36,14 +36,20 @@ const MainContent: React.FC = () => {
       const isAdminHash = hash === '#admin-page' || hash === '#admin' || hash === '#organizer';
       const desired = isAdminHash ? 'admin' : isRegisterHash ? 'register' : 'home';
       if (desired !== currentView) {
-        triggerLoadingSequence(desired);
+        if (hasLoadedInit) {
+          setCurrentView(desired);
+          setTargetView(desired);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+          triggerLoadingSequence(desired);
+        }
       }
     };
 
     handleHashChange();
     window.addEventListener('hashchange', handleHashChange);
     return () => window.removeEventListener('hashchange', handleHashChange);
-  }, [currentView]);
+  }, [currentView, hasLoadedInit]);
 
   const handleLoadingComplete = () => {
     setCurrentView(targetView);
