@@ -136,7 +136,7 @@ export const Navbar: React.FC = () => {
             <button
               onClick={toggleSound}
               title={soundOn ? 'Audio FX Enabled' : 'Audio FX Muted'}
-              className="p-2 bg-[#0e111a] border border-slate-700 hover:border-[#ff1a40] rounded text-slate-300 hover:text-[#ff1a40] transition-colors"
+              className="p-2 bg-[#0e111a] border border-slate-700 hover:border-[#ff1a40] rounded text-slate-300 hover:text-[#ff1a40] transition-colors cursor-pointer"
             >
               {soundOn ? <Volume2 className="w-4 h-4 text-[#ff1a40]" /> : <VolumeX className="w-4 h-4 text-slate-500" />}
             </button>
@@ -147,7 +147,7 @@ export const Navbar: React.FC = () => {
                 sound.playClick();
                 window.location.hash = '#admin-page';
               }}
-              className={`p-2 bg-[#0e111a] border rounded transition-all text-xs font-mono flex items-center gap-1.5 ${
+              className={`p-2 bg-[#0e111a] border rounded transition-all text-xs font-mono flex items-center gap-1.5 cursor-pointer ${
                 isAdmin
                   ? 'border-[#00ff66] text-[#00ff66] shadow-[0_0_10px_rgba(0,255,102,0.3)]'
                   : 'border-slate-700 text-slate-400 hover:text-white hover:border-slate-500'
