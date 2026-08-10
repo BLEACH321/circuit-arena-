@@ -102,11 +102,13 @@ export const ArenaProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const newScore: TeamScore = {
       teamId: newId,
       teamName: newTeam.teamName,
-      budgetScore: 12,
-      designScore: 20,
-      technicalScore: 12,
-      implementationScore: 24,
-      troubleshootingScore: 12,
+      auctionStrategy: 8,
+      budgetManagement: 8,
+      smartPurchasing: 8,
+      circuitDesign: 16,
+      innovation: 12,
+      circuitImplementation: 16,
+      technicalViva: 12,
       totalScore: 80
     };
     const updatedScores = [...scores, newScore];
@@ -135,11 +137,13 @@ export const ArenaProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const updateScore = (score: TeamScore) => {
     const totalScore = Number((
-      score.budgetScore +
-      score.designScore +
-      score.technicalScore +
-      score.implementationScore +
-      score.troubleshootingScore
+      score.auctionStrategy +
+      score.budgetManagement +
+      score.smartPurchasing +
+      score.circuitDesign +
+      score.innovation +
+      score.circuitImplementation +
+      score.technicalViva
     ).toFixed(1));
 
     const updatedScore = { ...score, totalScore };

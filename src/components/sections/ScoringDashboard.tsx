@@ -4,27 +4,72 @@ import { sound } from '../../utils/sound';
 
 export const ScoringDashboard: React.FC = () => {
   const [scores, setScores] = useState({
-    budget: 13.5,
-    design: 22,
-    technical: 13.5,
-    implementation: 26,
-    troubleshooting: 13.5
+    auctionStrategy: 9,
+    budgetManagement: 9,
+    smartPurchasing: 8,
+    circuitDesign: 18,
+    innovation: 13,
+    circuitImplementation: 18,
+    technicalViva: 13
   });
 
-  const total = Number((scores.budget + scores.design + scores.technical + scores.implementation + scores.troubleshooting).toFixed(1));
+  const total = Number((
+    scores.auctionStrategy +
+    scores.budgetManagement +
+    scores.smartPurchasing +
+    scores.circuitDesign +
+    scores.innovation +
+    scores.circuitImplementation +
+    scores.technicalViva
+  ).toFixed(1));
 
   const criteriaList = [
-    { key: 'budget', label: 'Budget & Procurement Strategy', max: 15, weight: '15%', color: '#ff6b00', glowClass: 'text-[#ff6b00]' },
-    { key: 'design', label: 'Circuit Design Quality & CAD', max: 25, weight: '25%', color: '#00f0ff', glowClass: 'text-[#00f0ff]' },
-    { key: 'technical', label: 'Technical Rationale & viva', max: 15, weight: '15%', color: '#ffb700', glowClass: 'text-[#ffb700]' },
-    { key: 'implementation', label: 'Hardware Implementation & Build', max: 30, weight: '30%', color: '#00ff66', glowClass: 'text-[#00ff66]' },
-    { key: 'troubleshooting', label: 'Fault Troubleshooting Speed', max: 15, weight: '15%', color: '#a855f7', glowClass: 'text-[#a855f7]' },
+    { key: 'auctionStrategy', label: 'Auction Strategy', max: 10, weight: '10 Marks', color: '#ff6b00' },
+    { key: 'budgetManagement', label: 'Budget Management', max: 10, weight: '10 Marks', color: '#ffaa00' },
+    { key: 'smartPurchasing', label: 'Smart Purchasing Decisions', max: 10, weight: '10 Marks', color: '#00f0ff' },
+    { key: 'circuitDesign', label: 'Circuit Design', max: 20, weight: '20 Marks', color: '#a855f7' },
+    { key: 'innovation', label: 'Innovation', max: 15, weight: '15 Marks', color: '#38bdf8' },
+    { key: 'circuitImplementation', label: 'Circuit Implementation', max: 20, weight: '20 Marks', color: '#00ff66' },
+    { key: 'technicalViva', label: 'Technical Explanation & Viva', max: 15, weight: '15 Marks', color: '#ff2a5f' }
   ];
 
   const presets = [
-    { name: '🏆 CHAMPIONSHIP SQUAD', scores: { budget: 15, design: 24.5, technical: 14.5, implementation: 29.5, troubleshooting: 14.5 } },
-    { name: '⚡ HIGH-TIER QUALIFIER', scores: { budget: 13, design: 21, technical: 12.5, implementation: 25, troubleshooting: 12.5 } },
-    { name: '🛡️ BALANCED STRATEGY', scores: { budget: 11, design: 18, technical: 11, implementation: 22, troubleshooting: 11 } },
+    {
+      name: '🏆 CHAMPIONSHIP SQUAD',
+      scores: {
+        auctionStrategy: 10,
+        budgetManagement: 9.5,
+        smartPurchasing: 9,
+        circuitDesign: 19,
+        innovation: 14,
+        circuitImplementation: 19,
+        technicalViva: 14.5
+      }
+    },
+    {
+      name: '⚡ HIGH-TIER QUALIFIER',
+      scores: {
+        auctionStrategy: 8.5,
+        budgetManagement: 8.5,
+        smartPurchasing: 8,
+        circuitDesign: 16.5,
+        innovation: 12,
+        circuitImplementation: 17,
+        technicalViva: 12.5
+      }
+    },
+    {
+      name: '🛡️ BALANCED STRATEGY',
+      scores: {
+        auctionStrategy: 7,
+        budgetManagement: 7.5,
+        smartPurchasing: 7,
+        circuitDesign: 14,
+        innovation: 10,
+        circuitImplementation: 15,
+        technicalViva: 10.5
+      }
+    }
   ];
 
   const handleSliderChange = (key: string, val: number) => {
@@ -37,11 +82,11 @@ export const ScoringDashboard: React.FC = () => {
     setScores(presetScores);
   };
 
-  // Pentagon Radar Chart Calculations
+  // Heptagon Radar Chart Calculations
   const radius = 75;
   const centerX = 100;
   const centerY = 100;
-  const angleStep = (Math.PI * 2) / 5;
+  const angleStep = (Math.PI * 2) / 7;
 
   const points = criteriaList.map((item, idx) => {
     const val = scores[item.key as keyof typeof scores];
@@ -69,13 +114,13 @@ export const ScoringDashboard: React.FC = () => {
         <div className="text-center max-w-3xl mx-auto mb-16">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 bg-[#0e111a] border border-[#00ff66]/40 text-[#00ff66] text-xs tracking-widest uppercase rounded mb-4 shadow-[0_0_15px_rgba(0,255,102,0.2)]">
             <Award className="w-4 h-4 text-[#ffb700]" />
-            EVALUATION MATRIX V2.6
+            EVALUATION MATRIX
           </div>
           <h2 className="text-3xl sm:text-6xl font-black font-display text-white tracking-wide uppercase">
-            SQUAD <span className="text-[#00ff66] text-glow-green">SCORE MATRIX</span>
+            FINAL <span className="text-[#00ff66] text-glow-green">SCORING</span>
           </h2>
           <p className="mt-4 text-slate-300 text-sm sm:text-base font-sans leading-relaxed">
-            Official 5-Tier Evaluation Weights. Adjust the performance matrix sliders or select squad presets to calculate live composite score metrics.
+            Official 7-Tier Evaluation Weights totaling 100 Marks. Adjust the performance matrix sliders or select squad presets to calculate live composite score metrics.
           </p>
 
           {/* Preset Buttons */}
@@ -87,7 +132,7 @@ export const ScoringDashboard: React.FC = () => {
               <button
                 key={p.name}
                 onClick={() => applyPreset(p.scores)}
-                className="px-4 py-2 bg-[#0e111a] hover:bg-[#151928] border border-slate-700 hover:border-[#00ff66] text-slate-200 hover:text-[#00ff66] text-xs font-bold rounded-lg transition-all hover:scale-105"
+                className="px-4 py-2 bg-[#0e111a] hover:bg-[#151928] border border-slate-700 hover:border-[#00ff66] text-slate-200 hover:text-[#00ff66] text-xs font-bold rounded-lg transition-all hover:scale-105 cursor-pointer"
               >
                 {p.name}
               </button>
@@ -109,7 +154,7 @@ export const ScoringDashboard: React.FC = () => {
               <span className="text-[10px] text-slate-400 uppercase tracking-widest">[ LIVE SIMULATOR ]</span>
             </div>
 
-            <div className="space-y-6">
+            <div className="space-y-5">
               {criteriaList.map((item) => {
                 const val = scores[item.key as keyof typeof scores];
                 const pct = Math.round((val / item.max) * 100);
@@ -148,8 +193,8 @@ export const ScoringDashboard: React.FC = () => {
                 <Activity className="w-3.5 h-3.5 animate-pulse" /> SQUAD CAPABILITY ANALYSIS: OK
               </span>
               <button
-                onClick={() => applyPreset({ budget: 13.5, design: 22, technical: 13.5, implementation: 26, troubleshooting: 13.5 })}
-                className="text-slate-400 hover:text-white flex items-center gap-1"
+                onClick={() => applyPreset({ auctionStrategy: 9, budgetManagement: 9, smartPurchasing: 8, circuitDesign: 18, innovation: 13, circuitImplementation: 18, technicalViva: 13 })}
+                className="text-slate-400 hover:text-white flex items-center gap-1 cursor-pointer"
               >
                 <RefreshCw className="w-3 h-3" /> RESET MATRIX
               </button>
@@ -165,11 +210,11 @@ export const ScoringDashboard: React.FC = () => {
                 <Cpu className="w-4 h-4 text-[#00ff66]" /> SQUAD RADAR MATRIX
               </span>
               <span className="text-[10px] text-[#00ff66] bg-[#00ff66]/10 px-2 py-0.5 rounded border border-[#00ff66]/30">
-                5-TIER ANALYZER
+                7-TIER ANALYZER
               </span>
             </div>
 
-            {/* SVG Pentagon Radar Matrix */}
+            {/* SVG Heptagon Radar Matrix */}
             <div className="relative w-48 h-48 my-2 flex items-center justify-center">
               <svg className="w-full h-full overflow-visible" viewBox="0 0 200 200">
                 {/* Background Grid Levels */}
@@ -257,3 +302,4 @@ export const ScoringDashboard: React.FC = () => {
     </section>
   );
 };
+export default ScoringDashboard;

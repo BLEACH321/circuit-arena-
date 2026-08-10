@@ -98,11 +98,11 @@ export const Hero: React.FC = () => {
             {/* Tagline */}
             <div className="flex items-center gap-2.5 text-[#ff1a40] text-xs font-mono tracking-[0.25em] uppercase mb-6 font-black select-none">
               <span className="w-5 h-[2px] bg-[#ff1a40] rounded-full animate-pulse" />
-              INNOVATE. BUILD. DOMINATE.
+              THE FINALS
             </div>
 
             {/* Main Heading (Dual Line, Solid and Outline) */}
-            <h1 className="font-display font-black text-6xl sm:text-7xl lg:text-[5.8rem] tracking-tight uppercase leading-none select-none drop-shadow-[0_10px_30px_rgba(0,0,0,0.95)]">
+            <h1 className="font-display font-black text-6xl sm:text-7xl lg:text-[5.5rem] tracking-tight uppercase leading-none select-none drop-shadow-[0_10px_30px_rgba(0,0,0,0.95)]">
               <span className="block text-white">CIRCUIT</span>
               <span 
                 className="block text-transparent"
@@ -113,11 +113,14 @@ export const Hero: React.FC = () => {
               >
                 ARENA
               </span>
+              <span className="block text-glow-orange text-[#ff1a40] text-3xl sm:text-4xl tracking-[0.1em] font-black mt-2 font-mono">
+                // THE FINALS
+              </span>
             </h1>
 
-            {/* Description */}
-            <p className="mt-8 max-w-lg text-slate-300 text-sm sm:text-base font-sans leading-relaxed tracking-wide">
-              A battleground for ideas, a platform for innovation. Step in. Build the future.
+            {/* Tagline */}
+            <p className="mt-8 max-w-lg text-slate-200 text-glow-cyan font-display font-black text-lg sm:text-xl tracking-wider leading-relaxed border-l-4 border-[#ff1a40] pl-4 uppercase">
+              "Bid. Build. Battle. Become the Champion."
             </p>
 
             {/* CTA Action Buttons */}

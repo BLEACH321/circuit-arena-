@@ -114,6 +114,67 @@ export const EventFlow: React.FC = () => {
           )}
         </div>
 
+        {/* 13-Phase Timeline at a Glance */}
+        <div className="pt-20 border-t border-slate-900 space-y-12">
+          <div className="text-center max-w-3xl mx-auto space-y-2">
+            <span className="text-[10px] font-mono text-[#00f0ff] uppercase tracking-widest block font-bold">// ARENA MASTER TIMELINE</span>
+            <h3 className="text-2xl sm:text-4xl font-black font-display text-white uppercase tracking-wider">
+              COMPLETE EVENT FLOW AT A Glance
+            </h3>
+            <p className="text-slate-400 text-xs sm:text-sm font-sans max-w-xl mx-auto leading-relaxed">
+              The full chronological progression of Circuit Arena: The Finals, from initial check-in to crowning the Champion.
+            </p>
+          </div>
+
+          <div className="relative max-w-4xl mx-auto">
+            {/* Timeline center line for desktop */}
+            <div className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-0.5 bg-slate-900 hidden md:block" />
+
+            <div className="space-y-8">
+              {[
+                { phase: 'PHASE 1', title: 'ENTER THE ARENA', desc: 'Teams register and receive 2000 Circuit Coins', color: '#00f0ff' },
+                { phase: 'PHASE 2', title: 'COMPONENT BATTLE', desc: 'Premium component auction starts (+25 increment)', color: '#ff6b00' },
+                { phase: 'PHASE 3', title: 'ENGINEERING MARKET', desc: 'Buy basic components from the fixed price store', color: '#00ff66' },
+                { phase: 'PHASE 4', title: 'MYSTERY DROP', desc: 'Risk remaining coins for an Advanced Mystery Box (300 Coins)', color: '#ff1a40' },
+                { phase: 'PHASE 5', title: 'FINAL ADVANTAGE', desc: 'Open Fortune/Advantage Chit to claim immediate advantages', color: '#a855f7' },
+                { phase: 'PHASE 6', title: 'MARKET LOCK', desc: 'Market closes. Components are finalized. NO MORE BUYING.', color: '#e2e8f0' },
+                { phase: 'PHASE 7', title: 'FINAL MISSION', desc: 'Common engineering problem statement revealed to all squads', color: '#ffb700' },
+                { phase: 'PHASE 8', title: 'BATTLE BLUEPRINT', desc: 'Submit Circuit Diagram, Block Diagram, Components, & Working Principle', color: '#38bdf8' },
+                { phase: 'PHASE 9', title: 'TECHNICAL SCREENING', desc: 'Jury evaluates design blueprints to shortlist squads', color: '#f8fafc' },
+                { phase: 'PHASE 10', title: 'THE FINALS', desc: 'Shortlisted squads physically build on a breadboard', color: '#ec4899' },
+                { phase: 'PHASE 11', title: 'LIVE DEMO', desc: 'Squads demonstrate functional circuits in active scenarios', color: '#22c55e' },
+                { phase: 'PHASE 12', title: 'FINAL VIVA', desc: 'Final Jury challenges squads on technical decisions', color: '#f59e0b' },
+                { phase: 'PHASE 13', title: 'CHAMPIONSHIP RESULT', desc: 'Circuit Arena Champion is crowned (3rd, Runner-Up, Winner)', color: '#eab308' }
+              ].map((p, idx) => {
+                const isEven = idx % 2 === 0;
+                return (
+                  <div key={idx} className="relative flex flex-col md:flex-row items-center gap-4 md:gap-8 group">
+                    {/* Node Dot */}
+                    <div className="absolute left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-[#07080c] border-2 border-slate-800 z-10 hidden md:flex items-center justify-center group-hover:border-[#ff6b00] group-hover:scale-125 transition-all">
+                      <div className="w-1.5 h-1.5 rounded-full bg-slate-900 group-hover:bg-[#ff6b00]" />
+                    </div>
+
+                    {/* Left Empty Column on Desktop / Content on Left */}
+                    <div className={`w-full md:w-1/2 flex ${isEven ? 'md:justify-end text-left md:text-right' : 'md:order-2 text-left'}`}>
+                      <div className="glass-panel p-5 rounded-xl border border-slate-900 group-hover:border-[#00f0ff]/40 bg-[#07080c]/60 max-w-sm transition-all duration-300 relative shadow-md">
+                        <div className="absolute top-0 bottom-0 left-0 w-1 bg-slate-900 group-hover:bg-[#00f0ff] transition-all" />
+                        <span className="font-mono text-[9px] font-bold tracking-widest block mb-1" style={{ color: p.color }}>
+                          {p.phase}
+                        </span>
+                        <h4 className="font-display font-bold text-sm text-white uppercase">{p.title}</h4>
+                        <p className="text-slate-400 text-[10px] font-sans mt-1.5 leading-relaxed">{p.desc}</p>
+                      </div>
+                    </div>
+
+                    {/* Right Empty Column on Desktop */}
+                    <div className="hidden md:block w-1/2" />
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
       </div>
     </section>
   );

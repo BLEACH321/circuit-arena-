@@ -25,12 +25,14 @@ export interface Team {
 export interface TeamScore {
   teamId: string;
   teamName: string;
-  budgetScore: number;         // Max 15
-  designScore: number;         // Max 25
-  technicalScore: number;      // Max 15
-  implementationScore: number; // Max 30
-  troubleshootingScore: number;// Max 15
-  totalScore: number;          // Max 100
+  auctionStrategy: number;       // Max 10
+  budgetManagement: number;      // Max 10
+  smartPurchasing: number;       // Max 10
+  circuitDesign: number;         // Max 20
+  innovation: number;            // Max 15
+  circuitImplementation: number; // Max 20
+  technicalViva: number;         // Max 15
+  totalScore: number;            // Max 100
 }
 
 export interface Announcement {

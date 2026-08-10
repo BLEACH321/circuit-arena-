@@ -349,10 +349,12 @@ export const AdminDashboard: React.FC = () => {
                   <tr>
                     <th className="p-3">TEAM ID</th>
                     <th className="p-3">TEAM NAME</th>
-                    <th className="p-3 text-center">BUDGET (15)</th>
-                    <th className="p-3 text-center">DESIGN (25)</th>
-                    <th className="p-3 text-center">TECH (15)</th>
-                    <th className="p-3 text-center">BUILD (30)</th>
+                    <th className="p-3 text-center">AUCTION (10)</th>
+                    <th className="p-3 text-center">BUDGET (10)</th>
+                    <th className="p-3 text-center">PURCHASE (10)</th>
+                    <th className="p-3 text-center">DESIGN (20)</th>
+                    <th className="p-3 text-center">INNOV (15)</th>
+                    <th className="p-3 text-center">BUILD (20)</th>
                     <th className="p-3 text-center">VIVA (15)</th>
                     <th className="p-3 text-right">TOTAL SCORE</th>
                     <th className="p-3 text-right">EDIT</th>
@@ -363,12 +365,14 @@ export const AdminDashboard: React.FC = () => {
                     <tr key={sc.teamId} className="hover:bg-[#0e111a]/60">
                       <td className="p-3 font-bold text-[#00f0ff]">{sc.teamId}</td>
                       <td className="p-3 font-bold text-white font-display">{sc.teamName}</td>
-                      <td className="p-3 text-center text-slate-300">{sc.budgetScore}</td>
-                      <td className="p-3 text-center text-slate-300">{sc.designScore}</td>
-                      <td className="p-3 text-center text-slate-300">{sc.technicalScore}</td>
-                      <td className="p-3 text-center text-slate-300">{sc.implementationScore}</td>
-                      <td className="p-3 text-center text-slate-300">{sc.troubleshootingScore}</td>
-                      <td className="p-3 text-right font-bold text-[#00ff66]">{sc.totalScore * 10} PTS</td>
+                      <td className="p-3 text-center text-slate-300">{sc.auctionStrategy}</td>
+                      <td className="p-3 text-center text-slate-300">{sc.budgetManagement}</td>
+                      <td className="p-3 text-center text-slate-300">{sc.smartPurchasing}</td>
+                      <td className="p-3 text-center text-slate-300">{sc.circuitDesign}</td>
+                      <td className="p-3 text-center text-slate-300">{sc.innovation}</td>
+                      <td className="p-3 text-center text-slate-300">{sc.circuitImplementation}</td>
+                      <td className="p-3 text-center text-slate-300">{sc.technicalViva}</td>
+                      <td className="p-3 text-right font-bold text-[#00ff66]">{sc.totalScore} / 100</td>
                       <td className="p-3 text-right">
                         <button
                           onClick={() => setEditingScore(sc)}
@@ -648,66 +652,92 @@ export const AdminDashboard: React.FC = () => {
 
             <div className="space-y-3 text-xs">
               <div>
-                <label className="block text-slate-400 mb-1">BUDGET STRATEGY (MAX 15)</label>
+                <label className="block text-slate-400 mb-1">AUCTION STRATEGY (MAX 10)</label>
+                <input
+                  type="number"
+                  min="0"
+                  max="10"
+                  step="0.5"
+                  value={editingScore.auctionStrategy}
+                  onChange={(e) => setEditingScore({ ...editingScore, auctionStrategy: parseFloat(e.target.value) || 0 })}
+                  className="w-full p-2 bg-[#07080c] border border-slate-700 rounded text-white"
+                />
+              </div>
+
+              <div>
+                <label className="block text-slate-400 mb-1">BUDGET MANAGEMENT (MAX 10)</label>
+                <input
+                  type="number"
+                  min="0"
+                  max="10"
+                  step="0.5"
+                  value={editingScore.budgetManagement}
+                  onChange={(e) => setEditingScore({ ...editingScore, budgetManagement: parseFloat(e.target.value) || 0 })}
+                  className="w-full p-2 bg-[#07080c] border border-slate-700 rounded text-white"
+                />
+              </div>
+
+              <div>
+                <label className="block text-slate-400 mb-1">SMART PURCHASING (MAX 10)</label>
+                <input
+                  type="number"
+                  min="0"
+                  max="10"
+                  step="0.5"
+                  value={editingScore.smartPurchasing}
+                  onChange={(e) => setEditingScore({ ...editingScore, smartPurchasing: parseFloat(e.target.value) || 0 })}
+                  className="w-full p-2 bg-[#07080c] border border-slate-700 rounded text-white"
+                />
+              </div>
+
+              <div>
+                <label className="block text-slate-400 mb-1">CIRCUIT DESIGN (MAX 20)</label>
+                <input
+                  type="number"
+                  min="0"
+                  max="20"
+                  step="0.5"
+                  value={editingScore.circuitDesign}
+                  onChange={(e) => setEditingScore({ ...editingScore, circuitDesign: parseFloat(e.target.value) || 0 })}
+                  className="w-full p-2 bg-[#07080c] border border-slate-700 rounded text-white"
+                />
+              </div>
+
+              <div>
+                <label className="block text-slate-400 mb-1">INNOVATION (MAX 15)</label>
                 <input
                   type="number"
                   min="0"
                   max="15"
                   step="0.5"
-                  value={editingScore.budgetScore}
-                  onChange={(e) => setEditingScore({ ...editingScore, budgetScore: parseFloat(e.target.value) || 0 })}
+                  value={editingScore.innovation}
+                  onChange={(e) => setEditingScore({ ...editingScore, innovation: parseFloat(e.target.value) || 0 })}
                   className="w-full p-2 bg-[#07080c] border border-slate-700 rounded text-white"
                 />
               </div>
 
               <div>
-                <label className="block text-slate-400 mb-1">CIRCUIT DESIGN (MAX 25)</label>
+                <label className="block text-slate-400 mb-1">CIRCUIT IMPLEMENTATION (MAX 20)</label>
                 <input
                   type="number"
                   min="0"
-                  max="25"
+                  max="20"
                   step="0.5"
-                  value={editingScore.designScore}
-                  onChange={(e) => setEditingScore({ ...editingScore, designScore: parseFloat(e.target.value) || 0 })}
+                  value={editingScore.circuitImplementation}
+                  onChange={(e) => setEditingScore({ ...editingScore, circuitImplementation: parseFloat(e.target.value) || 0 })}
                   className="w-full p-2 bg-[#07080c] border border-slate-700 rounded text-white"
                 />
               </div>
 
               <div>
-                <label className="block text-slate-400 mb-1">TECHNICAL EXPLANATION (MAX 15)</label>
-                <input
-                  type="number"
-                  min="0"
-                  max="15"
-                  step="0.5"
-                  value={editingScore.technicalScore}
-                  onChange={(e) => setEditingScore({ ...editingScore, technicalScore: parseFloat(e.target.value) || 0 })}
-                  className="w-full p-2 bg-[#07080c] border border-slate-700 rounded text-white"
-                />
-              </div>
-
-              <div>
-                <label className="block text-slate-400 mb-1">BUILD IMPLEMENTATION (MAX 30)</label>
-                <input
-                  type="number"
-                  min="0"
-                  max="30"
-                  step="0.5"
-                  value={editingScore.implementationScore}
-                  onChange={(e) => setEditingScore({ ...editingScore, implementationScore: parseFloat(e.target.value) || 0 })}
-                  className="w-full p-2 bg-[#07080c] border border-slate-700 rounded text-white"
-                />
-              </div>
-
-              <div>
-                <label className="block text-slate-400 mb-1">TROUBLESHOOTING &amp; VIVA (MAX 15)</label>
+                <label className="block text-slate-400 mb-1">TECHNICAL EXPLANATION &amp; VIVA (MAX 15)</label>
                 <input
                   type="number"
                   min="0"
                   max="15"
                   step="0.5"
-                  value={editingScore.troubleshootingScore}
-                  onChange={(e) => setEditingScore({ ...editingScore, troubleshootingScore: parseFloat(e.target.value) || 0 })}
+                  value={editingScore.technicalViva}
+                  onChange={(e) => setEditingScore({ ...editingScore, technicalViva: parseFloat(e.target.value) || 0 })}
                   className="w-full p-2 bg-[#07080c] border border-slate-700 rounded text-white"
                 />
               </div>
