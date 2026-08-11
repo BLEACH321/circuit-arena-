@@ -215,7 +215,7 @@ export const Stage1BidWars: React.FC = () => {
               activeItem={activeItem}
             />
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto text-left">
+            <div className="max-w-md mx-auto text-left">
               {/* Check in Form */}
               <div className="glass-panel p-6 sm:p-8 rounded-2xl border border-[#00f0ff]/30 bg-[#0e111a] space-y-4">
                 <h4 className="font-display font-bold text-white text-sm uppercase flex items-center gap-2 text-[#00f0ff]">
@@ -245,29 +245,6 @@ export const Stage1BidWars: React.FC = () => {
                     [ INITIALIZE BRIDGE ] <ArrowRight className="w-4 h-4" />
                   </button>
                 </form>
-              </div>
-
-              {/* Google Form Link */}
-              <div className="glass-panel p-6 sm:p-8 rounded-2xl border border-[#ff6b00]/30 bg-gradient-to-b from-[#1a1311]/40 to-[#07080c] flex flex-col justify-between space-y-6">
-                <div className="space-y-3">
-                  <h4 className="font-display font-bold text-white text-sm uppercase text-[#ff6b00]">
-                    NO ACTIVE SQUAD TICKET?
-                  </h4>
-                  <p className="text-[11px] text-slate-400 font-sans leading-relaxed">
-                    If your squad has not yet registered for Circuit Arena, you must complete the registration and obtain your ticket reference ID.
-                  </p>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    sound.playClick();
-                    window.open('https://forms.gle/JLGN8Z29SHA6bnM16', '_blank');
-                  }}
-                  className="w-full py-3.5 bg-gradient-to-r from-[#ff6b00] to-[#ff0055] text-black font-display font-black text-xs uppercase rounded shadow-[0_0_20px_rgba(255,107,0,0.4)] transition-all flex items-center justify-center gap-2 cursor-pointer hover:scale-[1.02]"
-                >
-                  [ OPEN REGISTRATION GATEWAY ]
-                </button>
               </div>
             </div>
           )}
