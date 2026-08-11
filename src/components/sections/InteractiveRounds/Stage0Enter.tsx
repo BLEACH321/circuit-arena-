@@ -4,7 +4,7 @@ import { useArena } from '../../../context/ArenaContext';
 import { sound } from '../../../utils/sound';
 
 export const Stage0Enter: React.FC = () => {
-  const { countdownTarget, arenaOpen, registeredTeam, setRegisteredTeam, teams, openRegistrationModal } = useArena();
+  const { countdownTarget, arenaOpen, registeredTeam, setRegisteredTeam, teams } = useArena();
   const [teamIdInput, setTeamIdInput] = useState<string>('');
   const [checkInError, setCheckInError] = useState<string>('');
 
@@ -260,7 +260,7 @@ export const Stage0Enter: React.FC = () => {
             type="button"
             onClick={() => {
               sound.playClick();
-              openRegistrationModal();
+              window.open('https://forms.gle/JLGN8Z29SHA6bnM16', '_blank');
             }}
             className="w-full py-3.5 bg-gradient-to-r from-[#ff6b00] to-[#ff0055] text-black font-display font-black text-xs uppercase rounded shadow-[0_0_20px_rgba(255,107,0,0.4)] transition-all flex items-center justify-center gap-2 cursor-pointer hover:scale-[1.02]"
           >

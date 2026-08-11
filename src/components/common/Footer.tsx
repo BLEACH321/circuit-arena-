@@ -15,8 +15,7 @@ export const Footer: React.FC = () => {
   const handleLinkClick = (link: typeof links[0]) => {
     sound.playClick();
     if (link.isRegister) {
-      window.location.hash = '#register-page';
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.open('https://forms.gle/JLGN8Z29SHA6bnM16', '_blank');
       return;
     }
     const target = document.querySelector(link.href);

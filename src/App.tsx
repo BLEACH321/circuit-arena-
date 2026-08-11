@@ -8,23 +8,20 @@ import { Hero } from './components/sections/Hero';
 import { AboutArena } from './components/sections/AboutArena';
 import { EventFlow } from './components/sections/EventFlow';
 import { RulesBook } from './components/sections/RulesBook';
-import { RegistrationProcess } from './components/sections/RegistrationProcess';
 import { LeaderboardSection } from './components/sections/LeaderboardSection';
 import { EventCountdown } from './components/sections/EventCountdown';
 import { AnnouncementsFeed } from './components/sections/AnnouncementsFeed';
 import { FinalCTA } from './components/sections/FinalCTA';
 import { Footer } from './components/common/Footer';
-import { RegisterPage } from './components/pages/RegisterPage';
 import { AdminPage } from './components/pages/AdminPage';
-import { RegistrationModal } from './components/registration/RegistrationModal';
 
 const MainContent: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
-  const [targetView, setTargetView] = useState<'home' | 'register' | 'admin'>('home');
-  const [currentView, setCurrentView] = useState<'home' | 'register' | 'admin'>('home');
+  const [targetView, setTargetView] = useState<'home' | 'admin'>('home');
+  const [currentView, setCurrentView] = useState<'home' | 'admin'>('home');
   const [hasLoadedInit, setHasLoadedInit] = useState<boolean>(false);
 
-  const triggerLoadingSequence = (newView: 'home' | 'register' | 'admin') => {
+  const triggerLoadingSequence = (newView: 'home' | 'admin') => {
     setTargetView(newView);
     setLoading(true);
   };
@@ -32,9 +29,8 @@ const MainContent: React.FC = () => {
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash;
-      const isRegisterHash = hash === '#register-page' || hash === '#register';
       const isAdminHash = hash === '#admin-page' || hash === '#admin' || hash === '#organizer';
-      const desired = isAdminHash ? 'admin' : isRegisterHash ? 'register' : 'home';
+      const desired = isAdminHash ? 'admin' : 'home';
       if (desired !== currentView) {
         if (hasLoadedInit) {
           setCurrentView(desired);
@@ -76,17 +72,11 @@ const MainContent: React.FC = () => {
           {/* PAGE SWITCHER */}
           {currentView === 'admin' ? (
             <AdminPage />
-          ) : currentView === 'register' ? (
-            <RegisterPage onBackToHome={() => {
-              window.location.hash = '#home';
-              triggerLoadingSequence('home');
-            }} />
           ) : (
             <main className="relative z-10">
               <Hero />
               <AboutArena />
               <EventFlow />
-              <RegistrationProcess />
               <RulesBook />
               <LeaderboardSection />
               <EventCountdown />
@@ -97,9 +87,6 @@ const MainContent: React.FC = () => {
 
           {/* Footer */}
           {currentView !== 'admin' && <Footer />}
-
-          {/* Modals & Control Center */}
-          <RegistrationModal />
         </div>
       )}
     </>

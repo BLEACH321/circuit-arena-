@@ -13,7 +13,7 @@ export const Navbar: React.FC = () => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 40);
 
-      const sections = ['home', 'about', 'arena', 'rounds', 'rules', 'leaderboard', 'register'];
+      const sections = ['home', 'about', 'arena', 'rounds', 'rules', 'leaderboard'];
       const scrollPos = window.scrollY + 200;
 
       for (const section of sections) {
@@ -52,7 +52,7 @@ export const Navbar: React.FC = () => {
     sound.playClick();
     setMobileMenuOpen(false);
 
-    if (window.location.hash === '#register-page') {
+    if (window.location.hash === '#register-page' || window.location.hash === '#register') {
       window.location.hash = '#home';
     }
 
@@ -65,8 +65,7 @@ export const Navbar: React.FC = () => {
   const handleRegisterButtonClick = () => {
     sound.playClick();
     setMobileMenuOpen(false);
-    window.location.hash = '#register-page';
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.open('https://forms.gle/JLGN8Z29SHA6bnM16', '_blank');
   };
 
   return (
