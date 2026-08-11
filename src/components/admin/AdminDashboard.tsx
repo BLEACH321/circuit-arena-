@@ -162,7 +162,7 @@ export const AdminDashboard: React.FC = () => {
             </button>
 
             <a
-              href="https://docs.google.com/spreadsheets/"
+              href="https://docs.google.com/spreadsheets/d/1huOCffh60GbU0ZEkDSChz-rBphcyhb9rM6dBNO9ZpGc/edit?resourcekey&usp=forms_web_b&urp=initialLink#gid=1826148244"
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => sound.playClick()}
