@@ -161,6 +161,16 @@ export const AdminDashboard: React.FC = () => {
               <Download className="w-4 h-4" /> [ EXPORT REGISTRATIONS ]
             </button>
 
+            <a
+              href="https://docs.google.com/spreadsheets/"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => sound.playClick()}
+              className="px-4 py-2 bg-[#00f0ff] hover:bg-[#5ce1e6] text-black font-display font-bold text-xs uppercase rounded transition-all flex items-center gap-1.5 shadow-[0_0_15px_rgba(0,240,255,0.4)]"
+            >
+              [ VIEW GOOGLE SHEET ]
+            </a>
+
             <button
               onClick={() => {
                 sound.playClick();
