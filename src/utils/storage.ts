@@ -6,35 +6,19 @@ const ANNOUNCEMENTS_KEY = 'circuit_arena_announcements';
 
 export const getStoredTeams = (): Team[] => {
   const data = localStorage.getItem(TEAMS_KEY);
-  const defaultMock: Team[] = [
-    {
-      teamId: 'CA-2026-101',
-      teamName: 'Demo Team',
-      college: 'Demo University',
-      leaderName: 'Demo User',
-      leaderEmail: 'demo@demo.com',
-      leaderPhone: '1234567890',
-      teamSize: 1,
-      status: 'APPROVED',
-      createdAt: new Date().toISOString(),
-      participants: [
-        { name: 'Demo User', email: 'demo@demo.com', phone: '1234567890', collegeId: 'ID-101', isLeader: true }
-      ]
-    }
-  ];
   if (!data) {
-    localStorage.setItem(TEAMS_KEY, JSON.stringify(defaultMock));
-    return defaultMock;
+    localStorage.setItem(TEAMS_KEY, JSON.stringify([]));
+    return [];
   }
   try {
     const parsed = JSON.parse(data);
-    if (!Array.isArray(parsed) || parsed.length === 0) {
-      localStorage.setItem(TEAMS_KEY, JSON.stringify(defaultMock));
-      return defaultMock;
+    if (!Array.isArray(parsed)) {
+      localStorage.setItem(TEAMS_KEY, JSON.stringify([]));
+      return [];
     }
     return parsed;
   } catch {
-    return defaultMock;
+    return [];
   }
 };
 
@@ -44,33 +28,19 @@ export const saveStoredTeams = (teams: Team[]): void => {
 
 export const getStoredScores = (): TeamScore[] => {
   const data = localStorage.getItem(SCORES_KEY);
-  const defaultScores: TeamScore[] = [
-    {
-      teamId: 'CA-2026-101',
-      teamName: 'Demo Team',
-      auctionStrategy: 8,
-      budgetManagement: 9,
-      smartPurchasing: 7,
-      circuitDesign: 16,
-      innovation: 12,
-      circuitImplementation: 15,
-      technicalViva: 13,
-      totalScore: 80
-    }
-  ];
   if (!data) {
-    localStorage.setItem(SCORES_KEY, JSON.stringify(defaultScores));
-    return defaultScores;
+    localStorage.setItem(SCORES_KEY, JSON.stringify([]));
+    return [];
   }
   try {
     const parsed = JSON.parse(data);
-    if (!Array.isArray(parsed) || parsed.length === 0) {
-      localStorage.setItem(SCORES_KEY, JSON.stringify(defaultScores));
-      return defaultScores;
+    if (!Array.isArray(parsed)) {
+      localStorage.setItem(SCORES_KEY, JSON.stringify([]));
+      return [];
     }
     return parsed;
   } catch {
-    return defaultScores;
+    return [];
   }
 };
 
