@@ -16,6 +16,8 @@ import { Footer } from './components/common/Footer';
 import { AdminPage } from './components/pages/AdminPage';
 import { ProjectorView } from './components/auction/ProjectorView';
 import { io } from 'socket.io-client';
+import { useArena } from './context/ArenaContext';
+import { Lock } from 'lucide-react';
 
 const socketUrl = window.location.hostname === 'localhost' 
   ? 'http://localhost:3001' 
@@ -27,6 +29,7 @@ const socket = io(socketUrl, {
 });
 
 const MainContent: React.FC = () => {
+  const { arenaOpen } = useArena();
   const [loading, setLoading] = useState<boolean>(true);
   const [targetView, setTargetView] = useState<'home' | 'admin' | 'live-auction'>('home');
   const [currentView, setCurrentView] = useState<'home' | 'admin' | 'live-auction'>('home');
@@ -133,7 +136,26 @@ const MainContent: React.FC = () => {
                   </div>
                   
                   <div className="glass-panel p-6 sm:p-10 rounded-2xl border border-[#ff6b00]/30 hud-box bg-gradient-to-b from-[#0d1019] to-[#07080c] min-h-[300px]">
-                    <Stage1BidWars />
+                    {!arenaOpen ? (
+                      <div className="flex flex-col items-center justify-center min-h-[250px] space-y-6 text-center font-mono animate-fade-in py-12">
+                        <div className="w-16 h-16 bg-[#ff1a40]/10 border-2 border-[#ff1a40] rounded-2xl flex items-center justify-center mx-auto shadow-[0_0_20px_rgba(255,26,64,0.4)] animate-pulse">
+                          <Lock className="w-8 h-8 text-[#ff1a40]" />
+                        </div>
+                        <div className="space-y-2">
+                          <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#07080c] border border-red-500/30 text-red-500 text-xs font-bold uppercase rounded">
+                            ACCESS STATUS: RESTRICTED
+                          </div>
+                          <h4 className="text-2xl font-black text-white uppercase tracking-wider">
+                            BID WARS ARENA IS LOCKED
+                          </h4>
+                          <p className="text-slate-400 text-xs font-mono max-w-md mx-auto leading-relaxed">
+                            This bidding arena will be unlocked and officially open on the day of the event (August 18, 2026). Check back during the live broadcast.
+                          </p>
+                        </div>
+                      </div>
+                    ) : (
+                      <Stage1BidWars />
+                    )}
                   </div>
                 </div>
               </section>
