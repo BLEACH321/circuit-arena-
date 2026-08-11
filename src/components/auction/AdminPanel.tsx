@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
-import { Upload, Play, Pause, RotateCcw, Gavel, Users, ShoppingBag } from 'lucide-react';
+import { Upload, Play, Pause, RotateCcw, Gavel, Users, ShoppingBag, RefreshCw } from 'lucide-react';
+import { sound } from '../../utils/sound';
 
 interface AdminPanelProps {
   socket: any;
@@ -17,7 +18,95 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   const [csvText, setCsvText] = useState('');
   const [csvError, setCsvError] = useState('');
   const [startingBudget, setStartingBudget] = useState(2000);
+  const [isSyncing, setIsSyncing] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const parseGoogleSheetCSV = (text: string) => {
+    const lines = text.split('\n');
+    if (lines.length === 0) return [];
+    
+    // Parse headers
+    const headerLine = lines[0];
+    const headers = headerLine.split(',').map(s => s.replace(/^["']|["']$/g, '').trim().toLowerCase());
+    
+    // Find index by checking matching text
+    let refIdIdx = headers.findIndex(h => h.includes('id') || h.includes('reference') || h.includes('code') || h.includes('ref'));
+    let teamNameIdx = headers.findIndex(h => h.includes('team name') || h.includes('squad name') || h.includes('group name') || (h.includes('team') && !h.includes('id') && !h.includes('size')));
+    let collegeIdx = headers.findIndex(h => h.includes('college') || h.includes('university') || h.includes('institution') || h.includes('school'));
+    let budgetIdx = headers.findIndex(h => h.includes('budget') || h.includes('coin') || h.includes('currency'));
+
+    // Fallbacks if not found by keywords
+    if (refIdIdx === -1) refIdIdx = 2; // Column 3 (0-indexed 2)
+    if (teamNameIdx === -1) teamNameIdx = 3;
+    if (collegeIdx === -1) collegeIdx = 4;
+    
+    const parsedTeams = [];
+    for (let i = 1; i < lines.length; i++) {
+      const line = lines[i];
+      if (!line.trim()) continue;
+      
+      // Handle commas inside quotes in CSV
+      const parts: string[] = [];
+      let current = '';
+      let inQuotes = false;
+      for (let c = 0; c < line.length; c++) {
+        const char = line[c];
+        if (char === '"') {
+          inQuotes = !inQuotes;
+        } else if (char === ',' && !inQuotes) {
+          parts.push(current.trim());
+          current = '';
+        } else {
+          current += char;
+        }
+      }
+      parts.push(current.trim());
+      
+      const refId = parts[refIdIdx]?.replace(/^["']|["']$/g, '').trim();
+      const teamName = parts[teamNameIdx]?.replace(/^["']|["']$/g, '').trim();
+      const college = parts[collegeIdx]?.replace(/^["']|["']$/g, '').trim() || 'Unknown';
+      const budget = budgetIdx !== -1 ? (Number(parts[budgetIdx]) || startingBudget) : startingBudget;
+      
+      if (refId && teamName && refId.toLowerCase().includes('ca-')) {
+        parsedTeams.push({ refId, teamName, college, budget });
+      }
+    }
+    return parsedTeams;
+  };
+
+  const handleSyncGoogleSheet = async () => {
+    setIsSyncing(true);
+    sound.playClick();
+    setCsvError('');
+    
+    try {
+      const docUrl = 'https://docs.google.com/spreadsheets/d/1huOCffh60GbU0ZEkDSChz-rBphcyhb9rM6dBNO9ZpGc/export?format=csv&gid=1826148244';
+      const response = await fetch(docUrl);
+      
+      if (!response.ok) {
+        if (response.status === 401 || response.status === 403) {
+          throw new Error("Private Access. Please share your Google Sheet as 'Anyone with the link can view' so the website can sync from it.");
+        }
+        throw new Error(`HTTP error ${response.status}`);
+      }
+      
+      const csvContent = await response.text();
+      const parsed = parseGoogleSheetCSV(csvContent);
+      
+      if (parsed.length === 0) {
+        throw new Error("No valid registrations found. Verify that reference IDs start with 'CA-' (e.g. CA-2026-101).");
+      }
+      
+      socket.emit('admin_set_teams', parsed);
+      sound.playSuccess();
+      alert(`Sync Complete! Automatically imported ${parsed.length} teams from the live Google Sheet!`);
+    } catch (err: any) {
+      sound.playClick();
+      setCsvError(err.message || 'Failed to fetch Google Sheet.');
+    } finally {
+      setIsSyncing(false);
+    }
+  };
 
   const parseCSVData = (text: string) => {
     const lines = text.split('\n');
@@ -131,6 +220,16 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
             </p>
 
             <div className="space-y-2">
+              <button
+                type="button"
+                disabled={isSyncing}
+                onClick={handleSyncGoogleSheet}
+                className="w-full py-2.5 bg-[#00f0ff]/10 hover:bg-[#00f0ff] border border-[#00f0ff]/40 hover:text-black rounded flex items-center justify-center gap-2 text-white font-bold cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+              >
+                <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin text-black' : 'text-[#00f0ff] group-hover:text-black'}`} /> 
+                {isSyncing ? 'Syncing...' : 'Sync from Google Sheet'}
+              </button>
+
               <input
                 type="file"
                 ref={fileInputRef}
@@ -141,7 +240,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="w-full py-2.5 bg-[#0e111a] hover:bg-[#ff6b00]/10 border border-slate-800 hover:border-[#ff6b00]/50 rounded flex items-center justify-center gap-2 text-white font-bold"
+                className="w-full py-2.5 bg-[#0e111a] hover:bg-[#ff6b00]/10 border border-slate-800 hover:border-[#ff6b00]/50 rounded flex items-center justify-center gap-2 text-white font-bold cursor-pointer"
               >
                 <Upload className="w-4 h-4 text-[#ff6b00]" /> Select CSV File
               </button>
