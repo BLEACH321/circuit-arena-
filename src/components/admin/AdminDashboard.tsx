@@ -1,4 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { AdminPanel } from '../auction/AdminPanel';
+import { io } from 'socket.io-client';
+
+const socketUrl = window.location.hostname === 'localhost' 
+  ? 'http://localhost:3001' 
+  : 'https://circuit-arena-bids.onrender.com';
+
+const socket = io(socketUrl, {
+  transports: ['websocket', 'polling'],
+  autoConnect: false
+});
 import {
   ShieldCheck, Search, Filter, Download, Trash2, CheckCircle2,
   XCircle, Eye, LogOut, X
@@ -29,7 +40,33 @@ export const AdminDashboard: React.FC = () => {
     resetArenaData
   } = useArena();
 
-  const [activeTab, setActiveTab] = useState<'teams' | 'scores' | 'announcements' | 'settings'>('teams');
+  const [activeTab, setActiveTab] = useState<'teams' | 'scores' | 'announcements' | 'settings' | 'auction'>('teams');
+
+  // Synced auction states
+  const [auctionTeams, setAuctionTeams] = useState<any[]>([]);
+  const [catalogue, setCatalogue] = useState<any[]>([]);
+  const [activeItem, setActiveItem] = useState<any>(null);
+
+  useEffect(() => {
+    if (activeTab === 'auction') {
+      if (!socket.connected) {
+        socket.connect();
+      }
+    }
+  }, [activeTab]);
+
+  useEffect(() => {
+    const handleStateUpdate = (data: any) => {
+      if (data.teams) setAuctionTeams(data.teams);
+      if (data.catalogue) setCatalogue(data.catalogue);
+      setActiveItem(data.activeItem);
+    };
+
+    socket.on('state_update', handleStateUpdate);
+    return () => {
+      socket.off('state_update', handleStateUpdate);
+    };
+  }, []);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [statusFilter, setStatusFilter] = useState<'ALL' | 'PENDING' | 'APPROVED' | 'REJECTED'>('ALL');
   
@@ -223,6 +260,17 @@ export const AdminDashboard: React.FC = () => {
             }`}
           >
             COUNTDOWN CONFIG
+          </button>
+
+          <button
+            onClick={() => setActiveTab('auction')}
+            className={`px-4 py-2 font-display font-bold uppercase rounded-t border-t border-x transition-colors ${
+              activeTab === 'auction'
+                ? 'bg-[#121624] text-[#ff1a40] border-[#ff1a40]'
+                : 'bg-transparent text-slate-400 border-transparent hover:text-white'
+            }`}
+          >
+            LIVE AUCTION
           </button>
         </div>
 
@@ -599,6 +647,16 @@ export const AdminDashboard: React.FC = () => {
               </div>
             </div>
           </div>
+        )}
+
+        {/* Tab 5: Live Auction */}
+        {activeTab === 'auction' && (
+          <AdminPanel
+            socket={socket}
+            teams={auctionTeams}
+            catalogue={catalogue}
+            activeItem={activeItem}
+          />
         )}
 
       </div>

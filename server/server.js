@@ -100,7 +100,6 @@ io.on('connection', (socket) => {
   
   // Roster CSV upload / Set teams
   socket.on('admin_set_teams', (uploadedTeams) => {
-    // uploadedTeams: Array of { refId, teamName, college, budget }
     state.teams = uploadedTeams.map(t => ({
       refId: t.refId.trim().toUpperCase(),
       teamName: t.teamName.trim(),
@@ -119,7 +118,6 @@ io.on('connection', (socket) => {
       budget: Number(startingBudget) || 2000,
       inventory: []
     }));
-    // Reset catalogue items status
     state.catalogue = JSON.parse(JSON.stringify(DEFAULT_CATALOGUE));
     state.activeItem = null;
     if (timerInterval) {
@@ -164,7 +162,6 @@ io.on('connection', (socket) => {
           state.activeItem.timer--;
           broadcastState();
         } else {
-          // Timer ended! Auto sell
           clearInterval(timerInterval);
           timerInterval = null;
           state.activeItem.isRunning = false;
@@ -185,7 +182,7 @@ io.on('connection', (socket) => {
     broadcastState();
   });
 
-  // Reset Bidding Timer (Adds 10 seconds or resets to 30)
+  // Reset Bidding Timer
   socket.on('admin_reset_timer', (seconds = 30) => {
     if (!state.activeItem) return;
     state.activeItem.timer = seconds;
@@ -278,7 +275,7 @@ io.on('connection', (socket) => {
     state.activeItem.item.highestBidder = team.refId;
     state.activeItem.item.highestBidderName = team.teamName;
 
-    // Add 5 seconds to timer if bid is placed within last 5 seconds (Anti-sniping protocol)
+    // Anti-sniping
     if (state.activeItem.timer <= 5) {
       state.activeItem.timer = Math.min(state.activeItem.timer + 5, 10);
       io.emit('auction_announcement', {
@@ -309,7 +306,6 @@ io.on('connection', (socket) => {
   });
 });
 
-// Auto sell function when timer ends or manual sell is triggered
 function handleAutoSell() {
   if (!state.activeItem) return;
 
@@ -319,13 +315,10 @@ function handleAutoSell() {
   if (itemIdx === -1) return;
 
   if (item.highestBidder) {
-    // Sold to team
     const teamIdx = state.teams.findIndex(t => t.refId === item.highestBidder);
     if (teamIdx !== -1) {
       const buyer = state.teams[teamIdx];
-      // Deduct budget
       buyer.budget -= item.currentBid;
-      // Add to inventory
       buyer.inventory.push({
         id: item.id,
         name: item.name,
@@ -333,13 +326,11 @@ function handleAutoSell() {
         purchasePrice: item.currentBid
       });
 
-      // Update catalogue item status
       state.catalogue[itemIdx].status = 'SOLD';
       state.catalogue[itemIdx].currentBid = item.currentBid;
       state.catalogue[itemIdx].highestBidder = item.highestBidder;
       state.catalogue[itemIdx].highestBidderName = buyer.teamName;
 
-      // Broadcast announcement
       io.emit('auction_announcement', {
         type: 'SOLD',
         message: `HAMMER DOWN! ${item.name} sold to ${buyer.teamName} for ${item.currentBid} Coins!`,
@@ -349,7 +340,6 @@ function handleAutoSell() {
       });
     }
   } else {
-    // Went unsold
     state.catalogue[itemIdx].status = 'UNSOLD';
     io.emit('auction_announcement', {
       type: 'UNSOLD',
@@ -357,13 +347,11 @@ function handleAutoSell() {
     });
   }
 
-  // Clear active item
   state.activeItem = null;
   saveState();
   broadcastState();
 }
 
-// REST API for basic queries or status page
 app.get('/api/status', (req, res) => {
   res.json({
     teamsCount: state.teams.length,

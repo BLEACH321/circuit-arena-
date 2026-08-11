@@ -4,7 +4,6 @@ import { Gavel, Clock, Trophy, Users, MonitorOff, Bell } from 'lucide-react';
 interface ProjectorViewProps {
   socket: any;
   teams: any[];
-  catalogue: any[];
   activeItem: any;
   onLogout: () => void;
 }
@@ -26,13 +25,11 @@ export const ProjectorView: React.FC<ProjectorViewProps> = ({
   // Monitor announcements
   useEffect(() => {
     const handleAnnounce = (ann: any) => {
-      // Append announcement
       setAnnouncements(prev => [
         { id: Date.now(), text: ann.message, type: ann.type },
         ...prev.slice(0, 4)
       ]);
 
-      // If item sold, trigger full-screen celebration
       if (ann.type === 'SOLD') {
         setCelebration({
           show: true,
@@ -41,7 +38,6 @@ export const ProjectorView: React.FC<ProjectorViewProps> = ({
           price: ann.price
         });
         
-        // Hide celebration overlay after 7 seconds
         setTimeout(() => setCelebration(null), 7000);
       }
     };
@@ -55,11 +51,10 @@ export const ProjectorView: React.FC<ProjectorViewProps> = ({
   const currentItem = activeItem?.item;
   const timer = activeItem?.timer || 0;
 
-  // Sort teams by remaining budget or items bought for leaderboard feel
   const sortedTeams = [...teams].sort((a, b) => b.inventory.length - a.inventory.length || b.budget - a.budget);
 
   return (
-    <div className="min-h-screen bg-[#030305] text-slate-100 font-mono text-left p-6 relative overflow-hidden flex flex-col justify-between">
+    <div className="min-h-screen bg-[#030305] text-slate-100 font-mono text-left p-6 relative overflow-hidden flex flex-col justify-between scanline-overlay">
       
       {/* Background Cyber Blue Grid */}
       <div className="absolute inset-0 bg-cyber-grid opacity-[0.06] pointer-events-none" />
@@ -76,7 +71,7 @@ export const ProjectorView: React.FC<ProjectorViewProps> = ({
               CIRCUIT <span className="text-[#ff6b00] text-glow-orange">ARENA</span>
             </h1>
             <span className="text-[10px] text-slate-500 uppercase tracking-widest font-black block mt-0.5">
-              // OFFICIAL TELEMETRY SCREEN
+              // TELEMETRY AUCTION MODULE
             </span>
           </div>
         </div>
@@ -89,7 +84,7 @@ export const ProjectorView: React.FC<ProjectorViewProps> = ({
           <button
             onClick={onLogout}
             title="Exit Projector Mode"
-            className="p-2 bg-[#0e111a] border border-slate-900 hover:border-red-500 rounded text-slate-600 hover:text-red-500 transition-colors"
+            className="p-2 bg-[#0e111a] border border-slate-900 hover:border-red-500 rounded text-slate-650 hover:text-red-500 transition-colors"
           >
             <MonitorOff className="w-4 h-4" />
           </button>
@@ -99,10 +94,10 @@ export const ProjectorView: React.FC<ProjectorViewProps> = ({
       {/* MAIN SCREEN AREA */}
       <div className="grid grid-cols-1 xl:grid-cols-4 gap-6 my-6 flex-1 items-stretch z-10">
         
-        {/* LEFT COLUMN: ACTIVE AUCTION (Takes 3 cols on wide screens) */}
+        {/* LEFT COLUMN: ACTIVE AUCTION */}
         <div className="xl:col-span-3 flex flex-col justify-between space-y-6">
           
-          <div className="glass-panel p-8 rounded-2xl border-2 border-slate-900/80 shadow-2xl flex-1 flex flex-col justify-between relative min-h-[400px]">
+          <div className="glass-panel p-8 rounded-2xl border-2 border-slate-900/80 shadow-2xl flex-1 flex flex-col justify-between relative min-h-[380px] bg-[#0e111a]/30">
             {/* HUD Corner Decals */}
             <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-[#ff6b00]/70" />
             <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-[#ff6b00]/70" />
@@ -112,12 +107,12 @@ export const ProjectorView: React.FC<ProjectorViewProps> = ({
             {!activeItem ? (
               <div className="m-auto text-center space-y-4">
                 <div className="w-20 h-20 bg-slate-950 border border-slate-800 rounded-2xl flex items-center justify-center mx-auto shadow-inner">
-                  <Gavel className="w-10 h-10 text-slate-600 animate-bounce" />
+                  <Gavel className="w-10 h-10 text-slate-650 animate-bounce" />
                 </div>
                 <div>
                   <h3 className="font-display font-black text-white text-lg uppercase tracking-widest">AUCTION PROTOCOL: STAGE 1</h3>
                   <p className="text-slate-400 font-sans text-xs max-w-sm mx-auto mt-2 leading-relaxed">
-                    Welcome to the Component Battle. Awaiting next telemetry command to unlock the active component.
+                    Awaiting next telemetry command to unlock the active component.
                   </p>
                 </div>
               </div>
@@ -157,16 +152,16 @@ export const ProjectorView: React.FC<ProjectorViewProps> = ({
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
                   
                   {/* High bid price */}
-                  <div className="bg-gradient-to-r from-amber-950/20 to-orange-950/20 p-6 rounded-2xl border border-orange-500/30 flex flex-col justify-center min-h-[160px] relative overflow-hidden">
+                  <div className="bg-gradient-to-r from-amber-950/20 to-orange-950/20 p-6 rounded-2xl border border-orange-500/30 flex flex-col justify-center min-h-[150px] relative overflow-hidden">
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-[#ff6b00]/5 rounded-full blur-2xl pointer-events-none" />
                     <span className="text-xs text-slate-400 uppercase tracking-widest block font-bold">CURRENT HIGHEST BID</span>
-                    <span className="text-5xl sm:text-6xl font-black font-display text-amber-500 text-glow-orange block mt-2">
+                    <span className="text-5xl font-black font-display text-amber-500 text-glow-orange block mt-2 font-mono">
                       {currentItem.currentBid} <span className="text-lg font-mono text-white tracking-normal font-normal">COINS</span>
                     </span>
                   </div>
 
                   {/* Highest Bidder Details */}
-                  <div className="bg-slate-950/80 p-6 rounded-2xl border border-slate-900 flex flex-col justify-center min-h-[160px] relative overflow-hidden">
+                  <div className="bg-slate-950/80 p-6 rounded-2xl border border-slate-900 flex flex-col justify-center min-h-[150px] relative overflow-hidden">
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-[#00f0ff]/5 rounded-full blur-2xl pointer-events-none" />
                     <span className="text-xs text-slate-400 uppercase tracking-widest block font-bold">HIGHEST BIDDER SQUAD</span>
                     {currentItem.highestBidder ? (
@@ -197,17 +192,17 @@ export const ProjectorView: React.FC<ProjectorViewProps> = ({
           </div>
 
           {/* Live scrolling announcement logs */}
-          <div className="glass-panel p-4 rounded-xl border border-slate-900 h-[100px] flex flex-col justify-center">
-            <span className="text-[9px] text-slate-500 uppercase tracking-widest block font-bold mb-2">LIVE ARENA COMMUNIQUÉS</span>
-            <div className="space-y-1 overflow-hidden h-[60px] text-[10px]">
+          <div className="glass-panel p-4 rounded-xl border border-slate-900 h-[80px] flex flex-col justify-center bg-[#0e111a]/30">
+            <span className="text-[9px] text-slate-500 uppercase tracking-widest block font-bold mb-1.5">LIVE ARENA COMMUNIQUÉS</span>
+            <div className="space-y-1 overflow-hidden h-[45px] text-[10px]">
               {announcements.length === 0 ? (
                 <div className="text-slate-800 italic">Static feedback loop... Standby.</div>
               ) : (
                 announcements.map((ann) => (
                   <div key={ann.id} className={`flex items-center gap-2 font-mono uppercase tracking-wide truncate ${
-                    ann.type === 'SOLD' ? 'text-[#00ff66] font-bold' : ann.type === 'TIME_EXTENDED' ? 'text-yellow-500' : 'text-slate-400'
+                    ann.type === 'SOLD' ? 'text-[#00ff66] font-bold' : ann.type === 'TIME_EXTENDED' ? 'text-yellow-500' : 'text-slate-405'
                   }`}>
-                    <span className="text-slate-600">&gt;&gt;</span>
+                    <span className="text-slate-650">&gt;&gt;</span>
                     <span>{ann.text}</span>
                   </div>
                 ))
@@ -218,28 +213,28 @@ export const ProjectorView: React.FC<ProjectorViewProps> = ({
         </div>
 
         {/* RIGHT COLUMN: LEADERBOARD / SQUAD MONITOR */}
-        <div className="xl:col-span-1 glass-panel p-5 rounded-2xl border border-slate-900 flex flex-col justify-between">
+        <div className="xl:col-span-1 glass-panel p-5 rounded-2xl border border-slate-900 flex flex-col justify-between bg-[#0e111a]/30">
           <div className="space-y-4">
-            <h3 className="font-display font-black text-white uppercase text-sm tracking-widest border-b border-slate-900 pb-2 flex items-center gap-2">
+            <h3 className="font-display font-black text-white uppercase text-xs tracking-widest border-b border-slate-900 pb-2 flex items-center gap-2">
               <Users className="w-4 h-4 text-[#ff6b00]" /> Telemetry Leaderboard
             </h3>
 
-            <div className="space-y-2.5 max-h-[460px] overflow-y-auto pr-1">
+            <div className="space-y-2 max-h-[360px] overflow-y-auto pr-1">
               {sortedTeams.length === 0 ? (
-                <div className="text-slate-800 text-center py-12">No rosters loaded.</div>
+                <div className="text-slate-800 text-center py-12 font-sans">No rosters loaded.</div>
               ) : (
                 sortedTeams.map((t, index) => (
-                  <div key={t.refId} className="p-3 bg-black/60 border border-slate-950 hover:border-slate-900 rounded-lg flex items-center justify-between">
+                  <div key={t.refId} className="p-2.5 bg-black/60 border border-slate-950 hover:border-slate-900 rounded-lg flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <span className="text-[10px] font-bold text-slate-600 font-display">#{index + 1}</span>
                       <div>
-                        <strong className="text-white text-xs block uppercase truncate max-w-[100px]">{t.teamName}</strong>
+                        <strong className="text-white text-xs block uppercase truncate max-w-[80px]">{t.teamName}</strong>
                         <span className="text-[8px] text-slate-500 uppercase">{t.refId}</span>
                       </div>
                     </div>
                     <div className="text-right">
-                      <span className="text-[#ffb700] font-bold font-display block text-[11px]">{t.budget} Coins</span>
-                      <span className="text-[8px] text-slate-500 uppercase font-bold tracking-wider">Bought: {t.inventory?.length || 0}</span>
+                      <span className="text-[#ffb700] font-bold font-display block text-[11px] font-mono">{t.budget}</span>
+                      <span className="text-[8px] text-slate-505 uppercase font-bold tracking-wider">Bought: {t.inventory?.length || 0}</span>
                     </div>
                   </div>
                 ))
@@ -256,49 +251,47 @@ export const ProjectorView: React.FC<ProjectorViewProps> = ({
 
       {/* FULL SCREEN CELEBRATION WIN OVERLAY */}
       {celebration && (
-        <div className="absolute inset-0 bg-[#050508]/95 backdrop-blur-md z-50 flex items-center justify-center p-6 animate-fade-in font-mono text-center">
-          {/* Glowing laser background particles */}
+        <div className="absolute inset-0 bg-[#050508]/98 backdrop-blur-md z-50 flex items-center justify-center p-6 animate-fade-in font-mono text-center">
           <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-[#ff6b00]/10 rounded-full blur-[160px] pointer-events-none animate-pulse" />
           <div className="absolute bottom-1/4 right-1/4 w-[600px] h-[600px] bg-[#00f0ff]/10 rounded-full blur-[160px] pointer-events-none animate-pulse" />
 
           <div className="max-w-2xl w-full bg-slate-950 border-2 border-[#ff6b00] rounded-3xl p-10 sm:p-14 shadow-[0_0_50px_rgba(255,107,0,0.5)] relative overflow-hidden hud-box">
             
-            {/* Glow laser line scans */}
             <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#ff6b00] to-transparent animate-pulse" />
 
             <div className="space-y-6 relative z-10">
               
-              <div className="w-20 h-20 bg-slate-900 border border-[#ff6b00] rounded-2xl flex items-center justify-center mx-auto shadow-[0_0_20px_rgba(255,107,0,0.3)]">
-                <Gavel className="w-10 h-10 text-[#ff6b00]" />
+              <div className="w-16 h-16 bg-slate-900 border border-[#ff6b00] rounded-2xl flex items-center justify-center mx-auto shadow-[0_0_20px_rgba(255,107,0,0.25)]">
+                <Gavel className="w-8 h-8 text-[#ff6b00]" />
               </div>
 
               <div className="space-y-1">
                 <span className="text-xs text-[#ff6b00] uppercase tracking-[0.25em] font-black animate-pulse block">// HAMMER DOWN SOLD //</span>
-                <h2 className="text-4xl sm:text-5xl font-display font-black text-white uppercase tracking-wider text-glow-orange mt-2">
+                <h2 className="text-3xl sm:text-4xl font-display font-black text-white uppercase tracking-wider text-glow-orange mt-2">
                   {celebration.itemName}
                 </h2>
               </div>
 
-              <p className="text-slate-400 font-sans text-sm max-w-md mx-auto leading-relaxed">
+              <p className="text-slate-400 font-sans text-xs max-w-sm mx-auto leading-relaxed">
                 Successfully acquired by the engineering squad at the bidding block.
               </p>
 
               <div className="grid grid-cols-2 gap-4 bg-[#07080c] p-6 rounded-2xl border border-slate-900 text-left max-w-md mx-auto">
                 <div>
-                  <span className="text-[10px] text-slate-500 block uppercase">ACQUIRED BY</span>
-                  <strong className="text-lg font-display font-black text-[#00f0ff] text-glow-cyan uppercase block mt-1 truncate">
+                  <span className="text-[9px] text-slate-500 block uppercase">ACQUIRED BY</span>
+                  <strong className="text-base font-display font-black text-[#00f0ff] text-glow-cyan uppercase block mt-1 truncate">
                     {celebration.buyerName}
                   </strong>
                 </div>
                 <div>
-                  <span className="text-[10px] text-slate-500 block uppercase">TRANSACTION COST</span>
-                  <strong className="text-lg font-display font-black text-amber-500 text-glow-orange block mt-1">
+                  <span className="text-[9px] text-slate-500 block uppercase">TRANSACTION COST</span>
+                  <strong className="text-base font-display font-black text-amber-500 text-glow-orange block mt-1 font-mono">
                     {celebration.price} Coins
                   </strong>
                 </div>
               </div>
 
-              <span className="block text-[9px] text-slate-600 uppercase tracking-widest font-bold">
+              <span className="block text-[9px] text-slate-650 uppercase tracking-widest font-bold">
                 Auto-locking hardware inventory profile... Done.
               </span>
 

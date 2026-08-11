@@ -1,22 +1,49 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ShoppingBag, Gavel, RotateCcw, Gift, GiftIcon } from 'lucide-react';
 import { sound } from '../../../utils/sound';
+import { useArena } from '../../../context/ArenaContext';
+import { TeamPortal } from '../../auction/TeamPortal';
+import { io } from 'socket.io-client';
+
+const socketUrl = window.location.hostname === 'localhost' 
+  ? 'http://localhost:3001' 
+  : 'https://circuit-arena-bids.onrender.com';
+
+const socket = io(socketUrl, {
+  transports: ['websocket', 'polling'],
+  autoConnect: false
+});
 
 export const Stage1BidWars: React.FC = () => {
+  const { registeredTeam } = useArena();
   const [budget, setBudget] = useState<number>(2000);
   const [activeSubTab, setActiveSubTab] = useState<'auction' | 'market' | 'mystery' | 'advantage'>('auction');
 
-  // Bidding states for Servo Motor Bidding Animation Example
-  const [servoBidStep, setServoBidStep] = useState<number>(0);
-  const [servoHighBidder, setServoHighBidder] = useState<string>('JURY SERVER');
-  const [servoBidPrice, setServoBidPrice] = useState<number>(200);
-  const [servoLog, setServoLog] = useState<string[]>(['Auction initialized. Starting bid: 200 Coins']);
+  // Synced auction states
+  const [auctionTeams, setAuctionTeams] = useState<any[]>([]);
+  const [activeItem, setActiveItem] = useState<any>(null);
 
-  // Auction Items State for other components
-  const [auctionItems, setAuctionItems] = useState([
-    { id: 'servo', name: 'Servo Motor', category: 'MOTOR', currentBid: 200, highBidder: 'JURY SERVER', minIncrement: 25 },
-    { id: 'ultrasonic', name: 'Ultrasonic Sensor', category: 'SENSOR', currentBid: 150, highBidder: 'JURY SERVER', minIncrement: 25 },
-  ]);
+  useEffect(() => {
+    if (registeredTeam) {
+      if (!socket.connected) {
+        socket.connect();
+      }
+    }
+  }, [registeredTeam]);
+
+  useEffect(() => {
+    const handleStateUpdate = (data: any) => {
+      if (data.teams) setAuctionTeams(data.teams);
+      setActiveItem(data.activeItem);
+    };
+
+    socket.on('state_update', handleStateUpdate);
+    return () => {
+      socket.off('state_update', handleStateUpdate);
+    };
+  }, []);
+
+
 
   // Engineering Market Items (Exact Price List from Document)
   const [storeItems, setStoreItems] = useState([
@@ -47,46 +74,7 @@ export const Stage1BidWars: React.FC = () => {
     { title: 'BETTER LUCK NEXT TIME', desc: 'No advantage granted. Continue with basic telemetry.' }
   ];
 
-  // Increment Servo Bidding example step
-  const handleServoBidStep = () => {
-    sound.playClick();
-    if (servoBidStep === 0) {
-      // Team A bids 225
-      setServoBidPrice(225);
-      setServoHighBidder('TEAM A');
-      setServoLog(prev => [...prev, '➔ Team A bids 225 Coins']);
-      setServoBidStep(1);
-    } else if (servoBidStep === 1) {
-      // Team B bids 250
-      setServoBidPrice(250);
-      setServoHighBidder('TEAM B');
-      setServoLog(prev => [...prev, '➔ Team B bids 250 Coins']);
-      setServoBidStep(2);
-    } else if (servoBidStep === 2) {
-      // Team C bids 275
-      setServoBidPrice(275);
-      setServoHighBidder('TEAM C');
-      setServoLog(prev => [...prev, '➔ Team C bids 275 Coins (Team C wins!)']);
-      setServoBidStep(3);
-    }
-  };
 
-  const handlePlaceBid = (itemId: string) => {
-    const item = auctionItems.find(i => i.id === itemId);
-    if (!item) return;
-
-    const newBid = item.currentBid + item.minIncrement;
-    if (budget < item.minIncrement) {
-      alert('INSUFFICIENT BUDGET! You cannot afford this bid.');
-      return;
-    }
-
-    sound.playBidSuccess();
-    setBudget(prev => prev - item.minIncrement);
-    setAuctionItems(prev =>
-      prev.map(i => i.id === itemId ? { ...i, currentBid: newBid, highBidder: 'YOUR SQUAD' } : i)
-    );
-  };
 
   const handleBuyStoreItem = (id: string, price: number) => {
     if (budget < price) {
@@ -120,14 +108,6 @@ export const Stage1BidWars: React.FC = () => {
   const handleResetAuction = () => {
     sound.playClick();
     setBudget(2000);
-    setServoBidStep(0);
-    setServoBidPrice(200);
-    setServoHighBidder('JURY SERVER');
-    setServoLog(['Auction initialized. Starting bid: 200 Coins']);
-    setAuctionItems([
-      { id: 'servo', name: 'Servo Motor', category: 'MOTOR', currentBid: 200, highBidder: 'JURY SERVER', minIncrement: 25 },
-      { id: 'ultrasonic', name: 'Ultrasonic Sensor', category: 'SENSOR', currentBid: 150, highBidder: 'JURY SERVER', minIncrement: 25 },
-    ]);
     setStoreItems([
       { id: 'breadboard', name: 'Breadboard', price: 100, count: 0 },
       { id: 'led', name: 'LED Pack', price: 30, count: 0 },
@@ -205,86 +185,27 @@ export const Stage1BidWars: React.FC = () => {
 
       {/* ROUND 1A: AUCTION SIMULATION */}
       {activeSubTab === 'auction' && (
-        <div className="space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            
-            {/* Left Box: Animated Official Bidding Example */}
-            <div className="glass-panel p-6 rounded-xl border border-[#ff6b00]/40 space-y-4">
-              <h4 className="font-display font-bold text-white text-sm uppercase flex items-center gap-2 text-[#ff6b00]">
-                <Gavel className="w-4 h-4" /> OFFICIAL BIDDING PROTOCOL EXAMPLE
-              </h4>
-              <p className="text-[11px] text-slate-400 font-sans leading-relaxed">
-                Bidding increments are fixed at <strong className="text-white">+25 Coins</strong> each time. Follow the exact bidding sequence from the official rulebook:
-              </p>
-
-              <div className="bg-[#07080c] p-4 rounded border border-slate-900 space-y-3">
-                <div className="flex justify-between items-center text-xs">
-                  <span className="text-slate-300 font-bold">COMPONENT: Servo Motor</span>
-                  <span className="text-[#ffb700] font-bold">STARTING BID: 200 COINS</span>
-                </div>
-
-                <div className="space-y-1 text-[10px] text-slate-400 font-mono bg-black/60 p-3 rounded max-h-[120px] overflow-y-auto">
-                  {servoLog.map((log, index) => (
-                    <div key={index} className={log.includes('Team C wins') ? 'text-[#00ff66] font-bold' : ''}>
-                      {log}
-                    </div>
-                  ))}
-                </div>
-
-                <div className="flex justify-between items-center text-xs pt-1 border-t border-slate-900">
-                  <span className="text-slate-500">CURRENT HIGHEST:</span>
-                  <span className="text-white font-bold">{servoHighBidder} ({servoBidPrice} Coins)</span>
-                </div>
+        <div>
+          {registeredTeam ? (
+            <TeamPortal
+              socket={socket}
+              refId={registeredTeam.teamId}
+              teams={auctionTeams}
+              activeItem={activeItem}
+            />
+          ) : (
+            <div className="glass-panel p-8 rounded-2xl border border-slate-800 text-center space-y-4 max-w-md mx-auto">
+              <div className="w-16 h-16 bg-slate-955 border border-slate-800 rounded-xl flex items-center justify-center mx-auto shadow-inner">
+                <Gavel className="w-8 h-8 text-slate-600" />
               </div>
-
-              {servoBidStep < 3 ? (
-                <button
-                  onClick={handleServoBidStep}
-                  className="w-full py-2 bg-[#ff6b00] hover:bg-[#ff851b] text-black font-display font-bold text-xs uppercase rounded"
-                >
-                  {servoBidStep === 0 && '[ SIMULATE TEAM A BID: 225 COINS ]'}
-                  {servoBidStep === 1 && '[ SIMULATE TEAM B BID: 250 COINS ]'}
-                  {servoBidStep === 2 && '[ SIMULATE TEAM C BID: 275 COINS ]'}
-                </button>
-              ) : (
-                <div className="p-3 bg-[#00ff66]/10 border border-[#00ff66]/40 rounded text-[#00ff66] text-center text-xs font-bold">
-                  ➔ TEAM C SECURES SERVO MOTOR AT 275 COINS
-                </div>
-              )}
-            </div>
-
-            {/* Right Box: Squad Custom Auctions */}
-            <div className="glass-panel p-6 rounded-xl border border-slate-800 space-y-4">
-              <h4 className="font-display font-bold text-white text-sm uppercase flex items-center gap-2 text-[#00f0ff]">
-                <Gavel className="w-4 h-4" /> ACTIVE SQUAD COMPONENT BATTLES
-              </h4>
-              <p className="text-[11px] text-slate-400 font-sans">
-                Place active bids for essential sensors and motors. Every bid increases the price by 25 Coins.
-              </p>
-
-              <div className="space-y-3">
-                {auctionItems.map((item) => (
-                  <div key={item.id} className="p-3 bg-[#07080c] border border-slate-900 rounded flex items-center justify-between">
-                    <div>
-                      <span className="text-[9px] text-slate-500 block">{item.category}</span>
-                      <strong className="text-white text-xs">{item.name}</strong>
-                      <span className="block text-[9px] text-[#ffb700] mt-0.5">
-                        Current: {item.currentBid} Coins (Bidder: {item.highBidder})
-                      </span>
-                    </div>
-
-                    <button
-                      onClick={() => handlePlaceBid(item.id)}
-                      className="px-3 py-2 bg-[#0e111a] border border-[#00f0ff]/50 hover:bg-[#00f0ff]/10 text-[#00f0ff] rounded text-[10px] uppercase font-bold"
-                    >
-                      +25 BID
-                    </button>
-                  </div>
-                ))}
+              <div>
+                <h4 className="font-display font-bold text-white text-sm uppercase">ROUND ACCESS RESTRICTED</h4>
+                <p className="text-[11px] text-slate-450 font-sans leading-relaxed mt-2">
+                  Your squad is not yet checked-in. Please navigate to **STAGE 0: ENTER THE ARENA** and enter your Reference ID to unlock live bidding telemetry.
+                </p>
               </div>
             </div>
-
-          </div>
+          )}
         </div>
       )}
 
