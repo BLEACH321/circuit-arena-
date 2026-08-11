@@ -51,7 +51,7 @@ export const ArenaProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [adminModalOpen, setAdminModalOpen] = useState<boolean>(false);
   const [registrationModalOpen, setRegistrationModalOpen] = useState<boolean>(false);
-  const [countdownTarget, setTargetDate] = useState<string>('2026-09-15T10:00:00');
+  const [countdownTarget, setTargetDate] = useState<string>('2026-08-18T10:00:00');
   const [registeredTeam, setRegisteredTeam] = useState<Team | null>(null);
   const [arenaOpen, setArenaOpenState] = useState<boolean>(() => {
     return localStorage.getItem('circuit_arena_open') === 'true';
