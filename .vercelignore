@@ -1,0 +1,7 @@
+*.mp4
+*.docx
+ChatGPT Image Aug 9, 2026, 03_28_20 PM.png
+dist
+node_modules
+.git
+.vercel
