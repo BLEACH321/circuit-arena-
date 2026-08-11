@@ -220,7 +220,11 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                     </div>
                     <div className="text-right">
                       <span className="text-amber-500 font-bold font-display block">{t.budget} Coins</span>
-                      <span className="text-[8px] text-[#00ff66] block">Bought: {t.inventory?.length || 0}</span>
+                      <span className="text-[8px] text-[#00ff66] block">
+                        Bought: {t.inventory && t.inventory.length > 0 
+                          ? t.inventory.map((inv: any) => inv.name).join(', ') 
+                          : 'None'}
+                      </span>
                     </div>
                   </div>
                 ))
