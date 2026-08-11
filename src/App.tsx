@@ -6,7 +6,7 @@ import { Navbar } from './components/common/Navbar';
 import { ArenaAudioPlayer } from './components/common/ArenaAudioPlayer';
 import { Hero } from './components/sections/Hero';
 import { AboutArena } from './components/sections/AboutArena';
-import { EventFlow } from './components/sections/EventFlow';
+import { Stage1BidWars } from './components/sections/InteractiveRounds/Stage1BidWars';
 import { RulesBook } from './components/sections/RulesBook';
 import { LeaderboardSection } from './components/sections/LeaderboardSection';
 import { EventCountdown } from './components/sections/EventCountdown';
@@ -121,7 +121,22 @@ const MainContent: React.FC = () => {
             <main className="relative z-10">
               <Hero />
               <AboutArena />
-              <EventFlow />
+              <section id="rounds" className="py-24 px-4 relative z-10 bg-[#06070a]/90">
+                <div className="max-w-7xl mx-auto">
+                  <div className="text-center max-w-3xl mx-auto mb-16">
+                    <h2 className="text-3xl sm:text-5xl font-black font-display text-white tracking-wide uppercase">
+                      LIVE <span className="text-[#00f0ff] text-glow-cyan">TELEMETRY BIDDING</span>
+                    </h2>
+                    <p className="mt-4 text-slate-350 text-sm sm:text-base font-sans leading-relaxed">
+                      Connect your telemetry bridge to participate in the live components battle and manage your virtual budget.
+                    </p>
+                  </div>
+                  
+                  <div className="glass-panel p-6 sm:p-10 rounded-2xl border border-[#ff6b00]/30 hud-box bg-gradient-to-b from-[#0d1019] to-[#07080c] min-h-[300px]">
+                    <Stage1BidWars />
+                  </div>
+                </div>
+              </section>
               <RulesBook />
               <LeaderboardSection />
               <EventCountdown />
