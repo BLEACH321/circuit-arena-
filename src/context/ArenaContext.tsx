@@ -53,13 +53,8 @@ export const ArenaProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [registrationModalOpen, setRegistrationModalOpen] = useState<boolean>(false);
   const [countdownTarget, setTargetDate] = useState<string>('2026-08-18T10:00:00');
   const [registeredTeam, setRegisteredTeam] = useState<Team | null>(null);
-  const [arenaOpen, setArenaOpenState] = useState<boolean>(() => {
-    return localStorage.getItem('circuit_arena_open') === 'true';
-  });
-  const [maxUnlockedStage, setMaxUnlockedStageState] = useState<number>(() => {
-    const val = localStorage.getItem('circuit_arena_max_stage');
-    return val !== null ? parseInt(val, 10) : 0; // Default to Stage 0 unlocked when opened
-  });
+  const [arenaOpen, setArenaOpenState] = useState<boolean>(true);
+  const [maxUnlockedStage, setMaxUnlockedStageState] = useState<number>(4);
 
   useEffect(() => {
     setTeams(getStoredTeams());
