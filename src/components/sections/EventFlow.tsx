@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Layers, Zap, Gavel, Cpu, Wrench, Trophy, Lock } from 'lucide-react';
-import { Stage0Enter } from './InteractiveRounds/Stage0Enter';
+import { Layers, Gavel, Cpu, Wrench, Trophy, Lock } from 'lucide-react';
 import { Stage1BidWars } from './InteractiveRounds/Stage1BidWars';
 import { Stage2Design } from './InteractiveRounds/Stage2Design';
 import { Stage3Build } from './InteractiveRounds/Stage3Build';
@@ -10,10 +9,9 @@ import { useArena } from '../../context/ArenaContext';
 
 export const EventFlow: React.FC = () => {
   const { arenaOpen, maxUnlockedStage } = useArena();
-  const [activeStage, setActiveStage] = useState<number>(0);
+  const [activeStage, setActiveStage] = useState<number>(1);
 
   const stages = [
-    { id: 0, tag: 'STAGE 0', title: 'ENTER THE ARENA', subtitle: 'REGISTRATION & BUDGET', icon: Zap, color: '#00f0ff' },
     { id: 1, tag: 'STAGE 1', title: 'BID WARS', subtitle: 'LIVE AUCTION & STORE', icon: Gavel, color: '#ff6b00' },
     { id: 2, tag: 'STAGE 2', title: 'DESIGN ARENA', subtitle: 'SCHEMATIC & BLUEPRINT', icon: Cpu, color: '#ffb700' },
     { id: 3, tag: 'STAGE 3', title: 'BUILD ARENA', subtitle: 'BREADBOARD & FAULT TEST', icon: Wrench, color: '#00ff66' },
@@ -105,7 +103,6 @@ export const EventFlow: React.FC = () => {
             </div>
           ) : (
             <>
-              {activeStage === 0 && <Stage0Enter />}
               {activeStage === 1 && <Stage1BidWars />}
               {activeStage === 2 && <Stage2Design />}
               {activeStage === 3 && <Stage3Build />}

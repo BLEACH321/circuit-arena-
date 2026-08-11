@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ShoppingBag, Gavel, RotateCcw, Gift, GiftIcon } from 'lucide-react';
+import { ShoppingBag, RotateCcw, Gift, GiftIcon, Key, ArrowRight } from 'lucide-react';
 import { sound } from '../../../utils/sound';
 import { useArena } from '../../../context/ArenaContext';
 import { TeamPortal } from '../../auction/TeamPortal';
@@ -15,7 +15,28 @@ const socket = io(socketUrl, {
 });
 
 export const Stage1BidWars: React.FC = () => {
-  const { registeredTeam } = useArena();
+  const { registeredTeam, setRegisteredTeam, teams } = useArena();
+  const [teamIdInput, setTeamIdInput] = useState<string>('');
+  const [checkInError, setCheckInError] = useState<string>('');
+
+  const handleCheckIn = (e: React.FormEvent) => {
+    e.preventDefault();
+    sound.playClick();
+    if (!teamIdInput.trim()) return;
+
+    const foundTeam = teams.find(
+      t => t.teamId.toLowerCase() === teamIdInput.trim().toLowerCase()
+    );
+
+    if (foundTeam) {
+      sound.playSuccess();
+      setRegisteredTeam(foundTeam);
+      setCheckInError('');
+      setTeamIdInput('');
+    } else {
+      setCheckInError('TEAM ID NOT FOUND. Verify spelling.');
+    }
+  };
   const [budget, setBudget] = useState<number>(2000);
   const [activeSubTab, setActiveSubTab] = useState<'auction' | 'market' | 'mystery' | 'advantage'>('auction');
 
@@ -194,15 +215,59 @@ export const Stage1BidWars: React.FC = () => {
               activeItem={activeItem}
             />
           ) : (
-            <div className="glass-panel p-8 rounded-2xl border border-slate-800 text-center space-y-4 max-w-md mx-auto">
-              <div className="w-16 h-16 bg-slate-955 border border-slate-800 rounded-xl flex items-center justify-center mx-auto shadow-inner">
-                <Gavel className="w-8 h-8 text-slate-600" />
-              </div>
-              <div>
-                <h4 className="font-display font-bold text-white text-sm uppercase">ROUND ACCESS RESTRICTED</h4>
-                <p className="text-[11px] text-slate-450 font-sans leading-relaxed mt-2">
-                  Your squad is not yet checked-in. Please navigate to **STAGE 0: ENTER THE ARENA** and enter your Reference ID to unlock live bidding telemetry.
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto text-left">
+              {/* Check in Form */}
+              <div className="glass-panel p-6 sm:p-8 rounded-2xl border border-[#00f0ff]/30 bg-[#0e111a] space-y-4">
+                <h4 className="font-display font-bold text-white text-sm uppercase flex items-center gap-2 text-[#00f0ff]">
+                  <Key className="w-4 h-4 text-[#00f0ff]" /> SQUAD CHECK-IN
+                </h4>
+                <p className="text-[11px] text-slate-400 font-sans leading-relaxed">
+                  Enter your official Team ID (e.g. <code className="text-white font-bold bg-slate-900 px-1.5 py-0.5 rounded">CA-2026-101</code>) to authorize your live auction telemetry bridge.
                 </p>
+
+                <form onSubmit={handleCheckIn} className="space-y-4 pt-2">
+                  <div className="space-y-1">
+                    <label className="block text-[10px] text-slate-400 uppercase font-bold">OFFICIAL TEAM ID</label>
+                    <input
+                      type="text"
+                      placeholder="CA-2026-XXX"
+                      value={teamIdInput}
+                      onChange={e => setTeamIdInput(e.target.value)}
+                      className="w-full p-3 bg-[#07080c] border border-slate-800 focus:border-[#00f0ff] rounded text-white tracking-widest font-bold uppercase outline-none text-xs"
+                    />
+                    {checkInError && <p className="text-red-400 text-[10px] font-mono mt-1">{checkInError}</p>}
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="w-full py-3 bg-[#00f0ff] hover:bg-[#5ce1e6] text-black font-display font-extrabold text-xs uppercase rounded shadow-[0_0_15px_rgba(0,240,255,0.3)] transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                  >
+                    [ INITIALIZE BRIDGE ] <ArrowRight className="w-4 h-4" />
+                  </button>
+                </form>
+              </div>
+
+              {/* Google Form Link */}
+              <div className="glass-panel p-6 sm:p-8 rounded-2xl border border-[#ff6b00]/30 bg-gradient-to-b from-[#1a1311]/40 to-[#07080c] flex flex-col justify-between space-y-6">
+                <div className="space-y-3">
+                  <h4 className="font-display font-bold text-white text-sm uppercase text-[#ff6b00]">
+                    NO ACTIVE SQUAD TICKET?
+                  </h4>
+                  <p className="text-[11px] text-slate-400 font-sans leading-relaxed">
+                    If your squad has not yet registered for Circuit Arena, you must complete the registration and obtain your ticket reference ID.
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    sound.playClick();
+                    window.open('https://forms.gle/JLGN8Z29SHA6bnM16', '_blank');
+                  }}
+                  className="w-full py-3.5 bg-gradient-to-r from-[#ff6b00] to-[#ff0055] text-black font-display font-black text-xs uppercase rounded shadow-[0_0_20px_rgba(255,107,0,0.4)] transition-all flex items-center justify-center gap-2 cursor-pointer hover:scale-[1.02]"
+                >
+                  [ OPEN REGISTRATION GATEWAY ]
+                </button>
               </div>
             </div>
           )}

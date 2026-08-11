@@ -1,0 +1,95 @@
+{
+  "teams": [],
+  "catalogue": [
+    {
+      "id": "item-1",
+      "name": "Arduino Uno R3",
+      "category": "MICROCONTROLLER",
+      "basePrice": 300,
+      "currentBid": 300,
+      "highestBidder": null,
+      "highestBidderName": null,
+      "status": "UNSOLD",
+      "minIncrement": 25
+    },
+    {
+      "id": "item-2",
+      "name": "Servo Motor SG90",
+      "category": "ACTUATOR",
+      "basePrice": 150,
+      "currentBid": 150,
+      "highestBidder": null,
+      "highestBidderName": null,
+      "status": "UNSOLD",
+      "minIncrement": 25
+    },
+    {
+      "id": "item-3",
+      "name": "Ultrasonic Sensor HC-SR04",
+      "category": "SENSOR",
+      "basePrice": 100,
+      "currentBid": 100,
+      "highestBidder": null,
+      "highestBidderName": null,
+      "status": "UNSOLD",
+      "minIncrement": 25
+    },
+    {
+      "id": "item-4",
+      "name": "L298N Motor Driver",
+      "category": "CONTROLLER",
+      "basePrice": 200,
+      "currentBid": 200,
+      "highestBidder": null,
+      "highestBidderName": null,
+      "status": "UNSOLD",
+      "minIncrement": 25
+    },
+    {
+      "id": "item-5",
+      "name": "16x2 LCD Display I2C",
+      "category": "DISPLAY",
+      "basePrice": 250,
+      "currentBid": 250,
+      "highestBidder": null,
+      "highestBidderName": null,
+      "status": "UNSOLD",
+      "minIncrement": 25
+    },
+    {
+      "id": "item-6",
+      "name": "5V Single-Channel Relay",
+      "category": "MODULE",
+      "basePrice": 120,
+      "currentBid": 120,
+      "highestBidder": null,
+      "highestBidderName": null,
+      "status": "UNSOLD",
+      "minIncrement": 25
+    },
+    {
+      "id": "item-7",
+      "name": "HC-05 Bluetooth Module",
+      "category": "COMMUNICATION",
+      "basePrice": 350,
+      "currentBid": 350,
+      "highestBidder": null,
+      "highestBidderName": null,
+      "status": "UNSOLD",
+      "minIncrement": 25
+    },
+    {
+      "id": "item-8",
+      "name": "Breadboard Power Supply 3.3V/5V",
+      "category": "POWER",
+      "basePrice": 100,
+      "currentBid": 100,
+      "highestBidder": null,
+      "highestBidderName": null,
+      "status": "UNSOLD",
+      "minIncrement": 25
+    }
+  ],
+  "activeItem": null,
+  "systemStatus": "IDLE"
+}
