@@ -30,17 +30,17 @@ export const Footer: React.FC = () => {
       {/* College Branding Row */}
       <div className="max-w-7xl mx-auto border-b border-slate-850 pb-10 mb-10 flex flex-col md:flex-row justify-between items-center gap-6">
         {/* College Logo & Name */}
-        <div className="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
+        <div className="flex flex-col sm:flex-row items-center gap-5 text-center sm:text-left">
           <img 
             src={collegeLogoImg} 
             alt="Vidyavardhini College Logo" 
-            className="w-14 h-14 object-contain filter brightness-110 transition-transform duration-300 hover:scale-105" 
+            className="w-18 h-18 sm:w-22 sm:h-22 object-contain filter brightness-110 transition-transform duration-300 hover:scale-105" 
           />
           <div>
-            <h4 className="font-display font-black text-sm text-white tracking-wider uppercase">
+            <h4 className="font-display font-black text-sm sm:text-base md:text-lg text-white tracking-wider uppercase">
               Vidyavardhini's College of Engineering & Technology
             </h4>
-            <p className="text-[10px] text-slate-400 font-sans tracking-wide mt-1">
+            <p className="text-[10px] sm:text-xs text-slate-400 font-sans tracking-wide mt-1.5">
               K.T. Marg, Vasai Road (West), Dist. Palghar — 401202, Maharashtra.
             </p>
           </div>
@@ -51,7 +51,7 @@ export const Footer: React.FC = () => {
           <img 
             src={iicLogoImg} 
             alt="Institution's Innovation Council Logo" 
-            className="h-12 w-auto object-contain filter brightness-110 transition-transform duration-300 hover:scale-105" 
+            className="h-14 sm:h-18 w-auto object-contain filter brightness-110 transition-transform duration-300 hover:scale-105" 
           />
         </div>
       </div>
