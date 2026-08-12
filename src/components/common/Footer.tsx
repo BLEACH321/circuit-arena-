@@ -1,5 +1,5 @@
 import React from 'react';
-import { Cpu, Globe, Share2, Mail } from 'lucide-react';
+import { Cpu, Globe, Instagram, Mail } from 'lucide-react';
 import { sound } from '../../utils/sound';
 import collegeLogoImg from '../../assets/college_logo.png';
 import iicLogoImg from '../../assets/iic_logo.png';
@@ -102,15 +102,15 @@ export const Footer: React.FC = () => {
           <h4 className="font-display font-bold text-white text-sm tracking-wider uppercase mb-4 text-[#00ff66]">
             CONNECT WITH ARENA
           </h4>
-          <div className="space-y-3">
-            <a href="https://instagram.com" target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-white transition-colors">
-              <Share2 className="w-4 h-4 text-[#ff6b00]" /> @circuitarena2026
+          <div className="space-y-3 text-[11px] sm:text-xs">
+            <a href="https://www.instagram.com/iicvcet?igsh=ejJsMnJiOGxuOTV3" target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-white transition-colors break-all">
+              <Instagram className="w-4 h-4 text-[#ff6b00]" /> @iicvcet
             </a>
             <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-white transition-colors">
               <Globe className="w-4 h-4 text-[#00f0ff]" /> Circuit Arena Official
             </a>
-            <a href="mailto:organizer@circuitarena.org" className="flex items-center gap-2 hover:text-white transition-colors">
-              <Mail className="w-4 h-4 text-[#ffb700]" /> organizer@circuitarena.org
+            <a href="mailto:institutionsinnovationcell.vcet@gmail.com" className="flex items-center gap-2 hover:text-white transition-colors break-all">
+              <Mail className="w-4 h-4 text-[#ffb700]" /> institutionsinnovationcell.vcet@gmail.com
             </a>
           </div>
         </div>

@@ -161,7 +161,7 @@ export const Hero: React.FC = () => {
             {/* Social Follow Links */}
             <div className="flex items-center gap-4 mt-8 font-mono text-[9px] text-slate-500 tracking-wider">
               <span className="uppercase">FOLLOW US</span>
-              <a href="https://instagram.com" target="_blank" rel="noreferrer" className="text-slate-400 hover:text-[#ff1a40] transition-colors">
+              <a href="https://www.instagram.com/iicvcet?igsh=ejJsMnJiOGxuOTV3" target="_blank" rel="noreferrer" className="text-slate-400 hover:text-[#ff1a40] transition-colors">
                 <Instagram className="w-4 h-4" />
               </a>
               <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="text-slate-400 hover:text-[#ff1a40] transition-colors">
