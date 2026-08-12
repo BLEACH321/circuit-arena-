@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Volume2, VolumeX, Menu, X } from 'lucide-react';
 import { sound } from '../../utils/sound';
 import logoImg from '../../assets/logo.png';
-import collegeHeaderImg from '../../assets/college_header.png';
+import collegeLogoImg from '../../assets/college_logo.png';
 
 export const Navbar: React.FC = () => {
   const [scrolled, setScrolled] = useState<boolean>(false);
@@ -83,13 +83,10 @@ export const Navbar: React.FC = () => {
           {/* Logo Group */}
           <div className="flex items-center gap-3">
             {/* Vidyavardhini Logo */}
-            <div 
-              className="w-9 h-9 bg-contain bg-left bg-no-repeat transition-transform hover:scale-105 cursor-pointer filter brightness-110"
-              style={{ 
-                backgroundImage: `url(${collegeHeaderImg})`,
-                backgroundSize: 'auto 100%',
-                backgroundPosition: 'left center'
-              }}
+            <img 
+              src={collegeLogoImg}
+              alt="Vidyavardhini College Logo"
+              className="w-9 h-9 object-contain transition-transform hover:scale-105 cursor-pointer filter brightness-110"
               title="Vidyavardhini's College of Engineering & Technology"
               onClick={() => {
                 sound.playClick();
