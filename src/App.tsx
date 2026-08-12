@@ -3,7 +3,6 @@ import { ArenaProvider } from './context/ArenaContext';
 import { LoadingScreen } from './components/common/LoadingScreen';
 import { ParticleBackground } from './components/common/ParticleBackground';
 import { Navbar } from './components/common/Navbar';
-import { CollegeHeader } from './components/common/CollegeHeader';
 import { ArenaAudioPlayer } from './components/common/ArenaAudioPlayer';
 import { Hero } from './components/sections/Hero';
 import { AboutArena } from './components/sections/AboutArena';
@@ -111,9 +110,6 @@ const MainContent: React.FC = () => {
         <div className="relative min-h-screen bg-[#07080c] text-slate-100 selection:bg-[#ff6b00] selection:text-black">
           {/* Futuristic Particle & Canvas Overlay */}
           <ParticleBackground />
-
-          {/* College Header */}
-          {currentView === 'home' && <CollegeHeader />}
 
           {/* Navigation Bar */}
           {currentView !== 'admin' && <Navbar />}
