@@ -1,6 +1,8 @@
 import React from 'react';
 import { Cpu, Globe, Share2, Mail } from 'lucide-react';
 import { sound } from '../../utils/sound';
+import collegeLogoImg from '../../assets/college_logo.png';
+import iicLogoImg from '../../assets/iic_logo.png';
 
 export const Footer: React.FC = () => {
   const links = [
@@ -24,6 +26,36 @@ export const Footer: React.FC = () => {
 
   return (
     <footer className="bg-[#050608] border-t border-slate-800/80 pt-16 pb-12 px-4 relative z-10 font-mono text-xs text-slate-400">
+      
+      {/* College Branding Row */}
+      <div className="max-w-7xl mx-auto border-b border-slate-850 pb-10 mb-10 flex flex-col md:flex-row justify-between items-center gap-6">
+        {/* College Logo & Name */}
+        <div className="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
+          <img 
+            src={collegeLogoImg} 
+            alt="Vidyavardhini College Logo" 
+            className="w-14 h-14 object-contain filter brightness-110 transition-transform duration-300 hover:scale-105" 
+          />
+          <div>
+            <h4 className="font-display font-black text-sm text-white tracking-wider uppercase">
+              Vidyavardhini's College of Engineering & Technology
+            </h4>
+            <p className="text-[10px] text-slate-400 font-sans tracking-wide mt-1">
+              K.T. Marg, Vasai Road (West), Dist. Palghar — 401202, Maharashtra.
+            </p>
+          </div>
+        </div>
+
+        {/* IIC Logo */}
+        <div className="flex items-center gap-3">
+          <img 
+            src={iicLogoImg} 
+            alt="Institution's Innovation Council Logo" 
+            className="h-12 w-auto object-contain filter brightness-110 transition-transform duration-300 hover:scale-105" 
+          />
+        </div>
+      </div>
+
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
         
         {/* Brand Column */}

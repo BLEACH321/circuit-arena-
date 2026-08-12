@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Volume2, VolumeX, Menu, X } from 'lucide-react';
 import { sound } from '../../utils/sound';
 import logoImg from '../../assets/logo.png';
-import collegeLogoImg from '../../assets/college_logo.png';
 
 export const Navbar: React.FC = () => {
   const [scrolled, setScrolled] = useState<boolean>(false);
@@ -80,49 +79,30 @@ export const Navbar: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           
-          {/* Logo Group */}
-          <div className="flex items-center gap-3">
-            {/* Vidyavardhini Logo */}
-            <img 
-              src={collegeLogoImg}
-              alt="Vidyavardhini College Logo"
-              className="w-10 h-10 sm:w-14 sm:h-14 object-contain transition-all duration-300 hover:scale-108 hover:filter hover:drop-shadow-[0_0_10px_rgba(255,255,255,0.2)] cursor-pointer filter brightness-110"
-              title="Vidyavardhini's College of Engineering & Technology"
-              onClick={() => {
-                sound.playClick();
-                window.location.hash = '#home';
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }}
-            />
-
-            {/* Divider */}
-            <div className="h-7 sm:h-9 w-px bg-slate-700/50" />
-
-            {/* Circuit Arena Logo */}
-            <a
-              href="#home"
-              onClick={(e) => {
-                e.preventDefault();
-                sound.playClick();
-                window.location.hash = '#home';
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }}
-              className="flex items-center gap-3 group cursor-pointer"
-            >
-              <div className="relative w-10 h-10 bg-[#0e111a] border border-[#ff1a40] rounded overflow-hidden flex items-center justify-center shadow-[0_0_15px_rgba(255,26,64,0.3)] group-hover:scale-105 transition-transform p-1.5">
-                <img src={logoImg} alt="Circuit Arena Logo" className="w-full h-full object-contain filter brightness-110" />
-                <div className="absolute -top-1 -right-1 w-2 h-2 bg-[#ff1a40] rounded-full animate-ping" />
-              </div>
-              <div>
-                <span className="font-display font-black text-xl tracking-wider text-white flex items-center gap-1.5">
-                  CIRCUIT <span className="text-[#ff1a40] text-glow-orange">ARENA</span>
-                </span>
-                <span className="block text-[9px] font-mono tracking-widest text-[#ff758f] uppercase opacity-80">
-                  TECHNICAL COMPETITION
-                </span>
-              </div>
-            </a>
-          </div>
+          {/* Logo */}
+          <a
+            href="#home"
+            onClick={(e) => {
+              e.preventDefault();
+              sound.playClick();
+              window.location.hash = '#home';
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            className="flex items-center gap-3 group cursor-pointer"
+          >
+            <div className="relative w-10 h-10 bg-[#0e111a] border border-[#ff1a40] rounded overflow-hidden flex items-center justify-center shadow-[0_0_15px_rgba(255,26,64,0.3)] group-hover:scale-105 transition-transform p-1.5">
+              <img src={logoImg} alt="Circuit Arena Logo" className="w-full h-full object-contain filter brightness-110" />
+              <div className="absolute -top-1 -right-1 w-2 h-2 bg-[#ff1a40] rounded-full animate-ping" />
+            </div>
+            <div>
+              <span className="font-display font-black text-xl tracking-wider text-white flex items-center gap-1.5">
+                CIRCUIT <span className="text-[#ff1a40] text-glow-orange">ARENA</span>
+              </span>
+              <span className="block text-[9px] font-mono tracking-widest text-[#ff758f] uppercase opacity-80">
+                TECHNICAL COMPETITION
+              </span>
+            </div>
+          </a>
 
           {/* Desktop Nav Links */}
           <nav className="hidden lg:flex items-center space-x-1 xl:space-x-3">
