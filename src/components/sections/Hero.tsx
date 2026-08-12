@@ -29,10 +29,7 @@ export const Hero: React.FC = () => {
     e.preventDefault();
     sound.playClick();
     if (arenaOpen) {
-      const target = document.getElementById('rounds');
-      if (target) {
-        target.scrollIntoView({ behavior: 'smooth' });
-      }
+      window.open('https://client-nine-phi-73.vercel.app/', '_blank');
     } else {
       setShowTooltip(true);
       setTimeout(() => setShowTooltip(false), 3000);

@@ -1,15 +1,21 @@
 import React, { useState } from 'react';
 import { Lock } from 'lucide-react';
 import { sound } from '../../utils/sound';
+import { useArena } from '../../context/ArenaContext';
 
 export const FinalCTA: React.FC = () => {
   const [showTooltip, setShowTooltip] = useState<boolean>(false);
+  const { arenaOpen } = useArena();
 
   const handleLockedClick = (e: React.MouseEvent) => {
     e.preventDefault();
     sound.playClick();
-    setShowTooltip(true);
-    setTimeout(() => setShowTooltip(false), 2500);
+    if (arenaOpen) {
+      window.open('https://client-nine-phi-73.vercel.app/', '_blank');
+    } else {
+      setShowTooltip(true);
+      setTimeout(() => setShowTooltip(false), 2500);
+    }
   };
 
   return (
@@ -33,26 +39,32 @@ export const FinalCTA: React.FC = () => {
               Assemble your team of 1–4 engineers, gear up for component auctions, build custom circuits under pressure, and defend your design.
             </p>
 
-            <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4 relative">
+             <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4 relative">
               <div className="relative group">
                 <button
                   onClick={handleLockedClick}
-                  onMouseEnter={() => setShowTooltip(true)}
+                  onMouseEnter={() => !arenaOpen && setShowTooltip(true)}
                   onMouseLeave={() => setShowTooltip(false)}
-                  className="px-10 py-5 bg-[#121520] border-2 border-slate-700 hover:border-[#ff6b00] text-slate-300 hover:text-white font-display font-black text-sm tracking-wider uppercase rounded shadow-[0_0_30px_rgba(0,0,0,0.8)] transition-all cursor-not-allowed flex items-center justify-center gap-2"
+                  className={`px-10 py-5 font-display font-black text-sm tracking-wider uppercase rounded shadow-[0_0_30px_rgba(0,0,0,0.8)] transition-all flex items-center justify-center gap-2 ${
+                    arenaOpen 
+                      ? 'bg-[#ff6b00] text-black border-2 border-[#ff6b00] hover:bg-transparent hover:text-white hover:shadow-[0_0_20px_rgba(255,107,0,0.4)] cursor-pointer' 
+                      : 'bg-[#121520] border-2 border-slate-700 hover:border-[#ff6b00] text-slate-300 hover:text-white cursor-not-allowed'
+                  }`}
                 >
-                  <Lock className="w-5 h-5 text-[#ff6b00] animate-pulse" />
-                  <span>[ ENTER THE ARENA ]</span>
+                  {!arenaOpen && <Lock className="w-5 h-5 text-[#ff6b00] animate-pulse" />}
+                  <span>{arenaOpen ? 'ENTER THE ARENA' : '[ ENTER THE ARENA ]'}</span>
                 </button>
 
                 {/* COMING SOON TOOLTIP */}
-                <div className={`absolute -top-12 left-1/2 -translate-x-1/2 transition-all duration-200 pointer-events-none z-50 ${showTooltip ? 'opacity-100 -translate-y-1' : 'opacity-0 group-hover:opacity-100 group-hover:-translate-y-1'}`}>
-                  <div className="px-3 py-1.5 bg-[#ff6b00] text-black font-mono font-bold text-xs uppercase rounded shadow-[0_0_15px_rgba(255,107,0,0.8)] whitespace-nowrap flex items-center gap-1">
-                    <Lock className="w-3.5 h-3.5 text-black" />
-                    <span>COMING SOON</span>
+                {!arenaOpen && (
+                  <div className={`absolute -top-12 left-1/2 -translate-x-1/2 transition-all duration-200 pointer-events-none z-50 ${showTooltip ? 'opacity-100 -translate-y-1' : 'opacity-0 group-hover:opacity-100 group-hover:-translate-y-1'}`}>
+                    <div className="px-3 py-1.5 bg-[#ff6b00] text-black font-mono font-bold text-xs uppercase rounded shadow-[0_0_15px_rgba(255,107,0,0.8)] whitespace-nowrap flex items-center gap-1">
+                      <Lock className="w-3.5 h-3.5 text-black" />
+                      <span>COMING SOON</span>
+                    </div>
+                    <div className="w-2 h-2 bg-[#ff6b00] transform rotate-45 mx-auto -mt-1" />
                   </div>
-                  <div className="w-2 h-2 bg-[#ff6b00] transform rotate-45 mx-auto -mt-1" />
-                </div>
+                )}
               </div>
             </div>
 
