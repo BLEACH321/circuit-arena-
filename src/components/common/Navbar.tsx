@@ -86,7 +86,7 @@ export const Navbar: React.FC = () => {
             <img 
               src={collegeLogoImg}
               alt="Vidyavardhini College Logo"
-              className="w-9 h-9 object-contain transition-transform hover:scale-105 cursor-pointer filter brightness-110"
+              className="w-10 h-10 sm:w-14 sm:h-14 object-contain transition-all duration-300 hover:scale-108 hover:filter hover:drop-shadow-[0_0_10px_rgba(255,255,255,0.2)] cursor-pointer filter brightness-110"
               title="Vidyavardhini's College of Engineering & Technology"
               onClick={() => {
                 sound.playClick();
@@ -96,7 +96,7 @@ export const Navbar: React.FC = () => {
             />
 
             {/* Divider */}
-            <div className="h-6 w-px bg-slate-700/50" />
+            <div className="h-7 sm:h-9 w-px bg-slate-700/50" />
 
             {/* Circuit Arena Logo */}
             <a
