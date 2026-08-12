@@ -3,7 +3,7 @@ import collegeHeaderImg from '../../assets/college_header.png';
 
 export const CollegeHeader: React.FC = () => {
   return (
-    <div className="w-full bg-[#050508] border-b border-white/5 relative z-40 select-none">
+    <div className="w-full bg-black border-b border-white/5 relative z-40 select-none">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-center items-center h-16 sm:h-20 md:h-24">
         <img
           src={collegeHeaderImg}
