@@ -11,7 +11,7 @@ export const Navbar: React.FC = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 40);
+      setScrolled(window.scrollY > 80);
 
       const sections = ['home', 'about', 'arena', 'rounds', 'rules', 'leaderboard'];
       const scrollPos = window.scrollY + 200;
@@ -70,10 +70,10 @@ export const Navbar: React.FC = () => {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? 'bg-[#050508]/90 backdrop-blur-md border-b border-[#ff1a40]/30 shadow-[0_4px_30px_rgba(0,0,0,0.8)]'
-          : 'bg-transparent border-b border-white/5'
+          ? 'fixed top-0 bg-[#050508]/90 backdrop-blur-md border-b border-[#ff1a40]/30 shadow-[0_4px_30px_rgba(0,0,0,0.8)]'
+          : 'absolute top-16 sm:top-20 md:top-24 bg-transparent border-b border-white/5'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
