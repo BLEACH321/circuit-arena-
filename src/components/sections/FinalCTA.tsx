@@ -1,11 +1,17 @@
 import React, { useState } from 'react';
-import { Lock } from 'lucide-react';
+import { Lock, UserPlus } from 'lucide-react';
 import { sound } from '../../utils/sound';
 import { useArena } from '../../context/ArenaContext';
 
 export const FinalCTA: React.FC = () => {
   const [showTooltip, setShowTooltip] = useState<boolean>(false);
   const { arenaOpen } = useArena();
+
+  const handleRegisterClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    sound.playClick();
+    window.open('https://forms.gle/JLGN8Z29SHA6bnM16', '_blank');
+  };
 
   const handleLockedClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -32,27 +38,37 @@ export const FinalCTA: React.FC = () => {
             </span>
 
             <h2 className="text-3xl sm:text-5xl font-black font-display text-white tracking-wide uppercase">
-              CLAIM YOUR SQUAD <span className="text-[#ff6b00] text-glow-orange">SPOT</span>
+              JOIN THE <span className="text-[#ff6b00] text-glow-orange">ARENA</span>
             </h2>
 
             <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
               Assemble your team of 1–4 engineers, gear up for component auctions, build custom circuits under pressure, and defend your design.
             </p>
 
-             <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4 relative">
+            <div className="pt-6 flex flex-col sm:flex-row items-center justify-center gap-6 relative">
+              {/* JOIN ARENA (REGISTER TEAM) BUTTON */}
+              <button
+                onClick={handleRegisterClick}
+                className="px-10 py-5 bg-[#ff1a40] text-white font-display font-black text-sm tracking-wider uppercase rounded shadow-[0_0_25px_rgba(255,26,64,0.4)] hover:shadow-[0_0_35px_rgba(255,26,64,0.6)] hover:bg-[#ff4d6d] hover:scale-[1.03] active:scale-[0.97] transition-all flex items-center justify-center gap-2 cursor-pointer border border-white/10"
+              >
+                <UserPlus className="w-5 h-5 text-white" />
+                <span>REGISTER TEAM</span>
+              </button>
+
+              {/* ENTER THE ARENA (STAGE APP) BUTTON */}
               <div className="relative group">
                 <button
                   onClick={handleLockedClick}
                   onMouseEnter={() => !arenaOpen && setShowTooltip(true)}
                   onMouseLeave={() => setShowTooltip(false)}
-                  className={`px-10 py-5 font-display font-black text-sm tracking-wider uppercase rounded shadow-[0_0_30px_rgba(0,0,0,0.8)] transition-all flex items-center justify-center gap-2 ${
+                  className={`px-10 py-5 font-display font-black text-sm tracking-wider uppercase rounded shadow-[0_0_30px_rgba(0,0,0,0.8)] transition-all flex items-center justify-center gap-2 border-2 ${
                     arenaOpen 
-                      ? 'bg-[#ff6b00] text-black border-2 border-[#ff6b00] hover:bg-transparent hover:text-white hover:shadow-[0_0_20px_rgba(255,107,0,0.4)] cursor-pointer' 
-                      : 'bg-[#121520] border-2 border-slate-700 hover:border-[#ff6b00] text-slate-300 hover:text-white cursor-not-allowed'
+                      ? 'bg-transparent text-white border-[#ff6b00] hover:bg-[#ff6b00]/10 cursor-pointer' 
+                      : 'bg-[#121520] border-slate-700 hover:border-[#ff6b00] text-slate-350 hover:text-white cursor-not-allowed'
                   }`}
                 >
                   {!arenaOpen && <Lock className="w-5 h-5 text-[#ff6b00] animate-pulse" />}
-                  <span>{arenaOpen ? 'ENTER THE ARENA' : '[ ENTER THE ARENA ]'}</span>
+                  <span>{arenaOpen ? 'ENTER ARENA PLATFORM' : '[ ENTER ARENA ]'}</span>
                 </button>
 
                 {/* COMING SOON TOOLTIP */}

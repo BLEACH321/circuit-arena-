@@ -13,7 +13,7 @@ export const Navbar: React.FC = () => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 40);
 
-      const sections = ['home', 'about', 'arena', 'rounds', 'rules', 'leaderboard'];
+      const sections = ['home', 'about', 'arena', 'rounds', 'rules', 'leaderboard', 'register'];
       const scrollPos = window.scrollY + 200;
 
       for (const section of sections) {
@@ -46,6 +46,7 @@ export const Navbar: React.FC = () => {
     { name: 'ROUNDS', href: '#rounds', id: 'rounds' },
     { name: 'RULES', href: '#rules', id: 'rules' },
     { name: 'LEADERBOARD', href: '#leaderboard', id: 'leaderboard' },
+    { name: 'JOIN ARENA', href: '#register', id: 'register' },
   ];
 
   const handleNavClick = (link: typeof navLinks[0]) => {
@@ -65,7 +66,12 @@ export const Navbar: React.FC = () => {
   const handleRegisterButtonClick = () => {
     sound.playClick();
     setMobileMenuOpen(false);
-    window.open('https://forms.gle/JLGN8Z29SHA6bnM16', '_blank');
+    const target = document.querySelector('#register');
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      window.open('https://forms.gle/JLGN8Z29SHA6bnM16', '_blank');
+    }
   };
 
   return (
@@ -151,8 +157,14 @@ export const Navbar: React.FC = () => {
             </button>
           </div>
 
-          {/* Mobile Hamburger Button */}
+          {/* Mobile Hamburger & Prominent Register Button */}
           <div className="flex md:hidden items-center gap-2">
+            <button
+              onClick={handleRegisterButtonClick}
+              className="px-3 py-1.5 bg-gradient-to-r from-[#ff1a40] to-[#ff4d6d] hover:from-[#ff4d6d] hover:to-[#ff1a40] text-white font-display font-black text-[10px] tracking-wider uppercase rounded shadow-[0_0_15px_rgba(255,26,64,0.4)] hover:shadow-[0_0_20px_rgba(255,26,64,0.6)] transition-all cursor-pointer border border-white/10 active:scale-95"
+            >
+              JOIN ARENA
+            </button>
             <button
               onClick={toggleSound}
               className="p-2 bg-[#0e111a] border border-slate-700 rounded text-slate-300"
