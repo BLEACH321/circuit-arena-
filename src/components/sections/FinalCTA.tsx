@@ -10,7 +10,7 @@ export const FinalCTA: React.FC = () => {
   const handleRegisterClick = (e: React.MouseEvent) => {
     e.preventDefault();
     sound.playClick();
-    window.open('https://forms.gle/JLGN8Z29SHA6bnM16', '_blank');
+    window.open('https://forms.gle/aajnQAHhmVVrNKBW7', '_blank');
   };
 
   const handleLockedClick = (e: React.MouseEvent) => {

@@ -66,12 +66,7 @@ export const Navbar: React.FC = () => {
   const handleRegisterButtonClick = () => {
     sound.playClick();
     setMobileMenuOpen(false);
-    const target = document.querySelector('#register');
-    if (target) {
-      target.scrollIntoView({ behavior: 'smooth' });
-    } else {
-      window.open('https://forms.gle/JLGN8Z29SHA6bnM16', '_blank');
-    }
+    window.open('https://forms.gle/aajnQAHhmVVrNKBW7', '_blank');
   };
 
   return (
